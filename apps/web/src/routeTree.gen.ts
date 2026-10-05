@@ -17,6 +17,7 @@ import { Route as ApiV1KidsRouteImport } from './routes/api/v1/kids'
 import { Route as ApiV1MeRouteImport } from './routes/api/v1/me'
 import { Route as ApiV1PairRouteImport } from './routes/api/v1/pair'
 import { Route as ApiV1AuthAppleRouteImport } from './routes/api/v1/auth/apple'
+import { Route as ApiV1AuthDevRouteImport } from './routes/api/v1/auth/dev'
 import { Route as ApiV1AuthSignOutRouteImport } from './routes/api/v1/auth/sign-out'
 import { Route as ApiV1DevicesDeviceIdRouteImport } from './routes/api/v1/devices.$deviceId'
 import { Route as ApiV1DevicesPushTokenRouteImport } from './routes/api/v1/devices.push-token'
@@ -62,6 +63,11 @@ const ApiV1AuthAppleRoute = ApiV1AuthAppleRouteImport.update({
   path: '/api/v1/auth/apple',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiV1AuthDevRoute = ApiV1AuthDevRouteImport.update({
+  id: '/api/v1/auth/dev',
+  path: '/api/v1/auth/dev',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiV1AuthSignOutRoute = ApiV1AuthSignOutRouteImport.update({
   id: '/api/v1/auth/sign-out',
   path: '/api/v1/auth/sign-out',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/pair': typeof ApiV1PairRoute
   '/api/v1/auth/apple': typeof ApiV1AuthAppleRoute
+  '/api/v1/auth/dev': typeof ApiV1AuthDevRoute
   '/api/v1/auth/sign-out': typeof ApiV1AuthSignOutRoute
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/pair': typeof ApiV1PairRoute
   '/api/v1/auth/apple': typeof ApiV1AuthAppleRoute
+  '/api/v1/auth/dev': typeof ApiV1AuthDevRoute
   '/api/v1/auth/sign-out': typeof ApiV1AuthSignOutRoute
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/pair': typeof ApiV1PairRoute
   '/api/v1/auth/apple': typeof ApiV1AuthAppleRoute
+  '/api/v1/auth/dev': typeof ApiV1AuthDevRoute
   '/api/v1/auth/sign-out': typeof ApiV1AuthSignOutRoute
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/api/v1/me'
     | '/api/v1/pair'
     | '/api/v1/auth/apple'
+    | '/api/v1/auth/dev'
     | '/api/v1/auth/sign-out'
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/api/v1/me'
     | '/api/v1/pair'
     | '/api/v1/auth/apple'
+    | '/api/v1/auth/dev'
     | '/api/v1/auth/sign-out'
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/api/v1/me'
     | '/api/v1/pair'
     | '/api/v1/auth/apple'
+    | '/api/v1/auth/dev'
     | '/api/v1/auth/sign-out'
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
@@ -181,6 +193,7 @@ export interface RootRouteChildren {
   ApiV1MeRoute: typeof ApiV1MeRoute
   ApiV1PairRoute: typeof ApiV1PairRoute
   ApiV1AuthAppleRoute: typeof ApiV1AuthAppleRoute
+  ApiV1AuthDevRoute: typeof ApiV1AuthDevRoute
   ApiV1AuthSignOutRoute: typeof ApiV1AuthSignOutRoute
 }
 
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/api/v1/auth/apple'
       fullPath: '/api/v1/auth/apple'
       preLoaderRoute: typeof ApiV1AuthAppleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/auth/dev': {
+      id: '/api/v1/auth/dev'
+      path: '/api/v1/auth/dev'
+      fullPath: '/api/v1/auth/dev'
+      preLoaderRoute: typeof ApiV1AuthDevRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/v1/auth/sign-out': {
@@ -308,6 +328,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiV1MeRoute: ApiV1MeRoute,
   ApiV1PairRoute: ApiV1PairRoute,
   ApiV1AuthAppleRoute: ApiV1AuthAppleRoute,
+  ApiV1AuthDevRoute: ApiV1AuthDevRoute,
   ApiV1AuthSignOutRoute: ApiV1AuthSignOutRoute,
 }
 export const routeTree = rootRouteImport

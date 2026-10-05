@@ -97,6 +97,10 @@ capability, so Xcode needs a paid Apple developer team to sign it (select it
 under Signing & Capabilities the first time). In the simulator, sign in to an
 Apple ID under Settings first; the API needs to reach appleid.apple.com.
 
+Without a paid team or an Apple ID, use **Dev: sign in as a test parent**
+under the Apple button. It only shows in development builds, and the API only
+accepts it from `pnpm dev:api` (production builds return 404).
+
 ## Everyday commands
 
 | Command | What it does |

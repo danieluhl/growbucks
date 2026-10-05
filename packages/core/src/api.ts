@@ -51,6 +51,12 @@ export const appleSignInSchema = z.object({
   device: deviceInfoSchema,
 })
 
+/** Local development only: sign in as a test parent without Apple. */
+export const devSignInSchema = z.object({
+  name: z.string().trim().min(1).max(60),
+  device: deviceInfoSchema,
+})
+
 // ---------------------------------------------------------------- family
 
 export const createFamilySchema = z.object({
@@ -128,6 +134,12 @@ export const endpoints = {
     method: "POST",
     path: () => `${API_PREFIX}/auth/apple`,
     body: appleSignInSchema,
+    response: authResponseSchema,
+  },
+  devSignIn: {
+    method: "POST",
+    path: () => `${API_PREFIX}/auth/dev`,
+    body: devSignInSchema,
     response: authResponseSchema,
   },
   signOut: {

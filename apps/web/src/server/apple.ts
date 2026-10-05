@@ -50,6 +50,7 @@ export async function verifyAppleToken(token: string) {
     }
   } catch (e) {
     if (!(e instanceof AppleTokenError)) throw e
+    console.warn(`Apple sign-in rejected: ${e.message}`)
     throw new HttpError(
       401,
       "apple_sign_in_failed",
