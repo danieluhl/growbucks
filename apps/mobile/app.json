@@ -25,6 +25,12 @@
       "expo-secure-store",
       "expo-apple-authentication",
       [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "GrowBucks uses Face ID so only a parent can switch from a kid's view back to the parent view."
+        }
+      ],
+      [
         "expo-camera",
         {
           "cameraPermission": "GrowBucks uses the camera to scan the code on a parent's phone and link this device.",

@@ -21,6 +21,10 @@ Interest engine: `src/lib/growth.ts`. Task rewards and celebration sizing:
   The parent's screen switches to "Linked!" automatically.
 - **Kid sessions** can view, explore, check off tasks and propose; they can't
   change money, rules or devices.
+- **Kid view on a parent's phone**: a kid doesn't need a device. From the
+  parent home, "Show Maya's view on this phone" opens her kid view right
+  there; "Parent view" switches back after the phone's Face ID or passcode.
+  Her own iPad can still be linked later.
 - **Siblings sharing an iPad**: each links with their own code; the kid home
   shows a name switcher. (Optional per-kid PIN on shared devices: later.)
 - **Devices**: parents see every linked phone/iPad with who's on it and when

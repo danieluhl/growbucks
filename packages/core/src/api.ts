@@ -173,6 +173,12 @@ export const endpoints = {
     body: z.object({}),
     response: pairingCodeResponseSchema,
   },
+  openKidView: {
+    method: "POST",
+    path: (p: { kidId: string }) => `${API_PREFIX}/kids/${p.kidId}/session`,
+    body: z.object({}),
+    response: authResponseSchema,
+  },
   redeemPairingCode: {
     method: "POST",
     path: () => `${API_PREFIX}/pair`,

@@ -1,7 +1,9 @@
 import { router, useFocusEffect } from "expo-router"
 import { useCallback } from "react"
 import { Pressable, Text, View } from "react-native"
-import { Avatar, Body, Card, Screen, Title } from "@/components/ui"
+import { Avatar, Body, Button, Card, Screen, Title } from "@/components/ui"
+import { isTablet } from "@/lib/device"
+import { confirmParent } from "@/lib/parent-check"
 import { useSession } from "@/lib/session"
 import { fonts, radius, space, useColors } from "@/theme"
 
@@ -13,6 +15,11 @@ import { fonts, radius, space, useColors } from "@/theme"
 export default function Garden() {
   const c = useColors()
   const { current, all, switchTo, refresh } = useSession()
+  // Set when a parent opened this kid's view on their own phone.
+  const parent = all.find((s) => s.kind === "parent")
+  const toParentView = async () => {
+    if (parent && (await confirmParent())) await switchTo(parent.member.id)
+  }
 
   // Picks up a revoked device (parent removed it) on every visit.
   useFocusEffect(
@@ -72,19 +79,29 @@ export default function Garden() {
       </View>
       <Card tone="leaf">
         <Body>
-          This iPad is linked. Your garden is being planted: soon you'll see
-          your money grow here, every single day.
+          {parent ? "" : `This ${isTablet() ? "iPad" : "phone"} is linked. `}
+          Your garden is being planted: soon you'll see your money grow here,
+          every single day.
         </Body>
       </Card>
 
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => router.push("/add-sibling")}
-      >
-        <Body muted style={{ fontSize: 15, textDecorationLine: "underline" }}>
-          Share this iPad with a brother or sister
-        </Body>
-      </Pressable>
+      {parent ? (
+        <Button
+          label="Parent view"
+          variant="secondary"
+          onPress={toParentView}
+          testID="parent-view"
+        />
+      ) : (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push("/add-sibling")}
+        >
+          <Body muted style={{ fontSize: 15, textDecorationLine: "underline" }}>
+            Share this {isTablet() ? "iPad" : "phone"} with a brother or sister
+          </Body>
+        </Pressable>
+      )}
     </Screen>
   )
 }

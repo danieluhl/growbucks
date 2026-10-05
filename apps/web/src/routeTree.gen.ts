@@ -22,6 +22,7 @@ import { Route as ApiV1AuthSignOutRouteImport } from './routes/api/v1/auth/sign-
 import { Route as ApiV1DevicesDeviceIdRouteImport } from './routes/api/v1/devices.$deviceId'
 import { Route as ApiV1DevicesPushTokenRouteImport } from './routes/api/v1/devices.push-token'
 import { Route as ApiV1KidsKidIdPairingCodeRouteImport } from './routes/api/v1/kids.$kidId.pairing-code'
+import { Route as ApiV1KidsKidIdSessionRouteImport } from './routes/api/v1/kids.$kidId.session'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -89,6 +90,11 @@ const ApiV1KidsKidIdPairingCodeRoute =
     path: '/$kidId/pairing-code',
     getParentRoute: () => ApiV1KidsRoute,
   } as any)
+const ApiV1KidsKidIdSessionRoute = ApiV1KidsKidIdSessionRouteImport.update({
+  id: '/$kidId/session',
+  path: '/$kidId/session',
+  getParentRoute: () => ApiV1KidsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
   '/api/v1/kids/$kidId/pairing-code': typeof ApiV1KidsKidIdPairingCodeRoute
+  '/api/v1/kids/$kidId/session': typeof ApiV1KidsKidIdSessionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
   '/api/v1/kids/$kidId/pairing-code': typeof ApiV1KidsKidIdPairingCodeRoute
+  '/api/v1/kids/$kidId/session': typeof ApiV1KidsKidIdSessionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
   '/api/v1/kids/$kidId/pairing-code': typeof ApiV1KidsKidIdPairingCodeRoute
+  '/api/v1/kids/$kidId/session': typeof ApiV1KidsKidIdSessionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
     | '/api/v1/kids/$kidId/pairing-code'
+    | '/api/v1/kids/$kidId/session'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
     | '/api/v1/kids/$kidId/pairing-code'
+    | '/api/v1/kids/$kidId/session'
   id:
     | '__root__'
     | '/'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
     | '/api/v1/kids/$kidId/pairing-code'
+    | '/api/v1/kids/$kidId/session'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -290,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1KidsKidIdPairingCodeRouteImport
       parentRoute: typeof ApiV1KidsRoute
     }
+    '/api/v1/kids/$kidId/session': {
+      id: '/api/v1/kids/$kidId/session'
+      path: '/$kidId/session'
+      fullPath: '/api/v1/kids/$kidId/session'
+      preLoaderRoute: typeof ApiV1KidsKidIdSessionRouteImport
+      parentRoute: typeof ApiV1KidsRoute
+    }
   }
 }
 
@@ -309,10 +328,12 @@ const ApiV1DevicesRouteWithChildren = ApiV1DevicesRoute._addFileChildren(
 
 interface ApiV1KidsRouteChildren {
   ApiV1KidsKidIdPairingCodeRoute: typeof ApiV1KidsKidIdPairingCodeRoute
+  ApiV1KidsKidIdSessionRoute: typeof ApiV1KidsKidIdSessionRoute
 }
 
 const ApiV1KidsRouteChildren: ApiV1KidsRouteChildren = {
   ApiV1KidsKidIdPairingCodeRoute: ApiV1KidsKidIdPairingCodeRoute,
+  ApiV1KidsKidIdSessionRoute: ApiV1KidsKidIdSessionRoute,
 }
 
 const ApiV1KidsRouteWithChildren = ApiV1KidsRoute._addFileChildren(

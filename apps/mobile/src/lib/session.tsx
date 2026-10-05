@@ -13,8 +13,9 @@ import { ApiClientError, call } from "./api"
 
 /**
  * Who is signed in on this device. A parent's phone holds one parent
- * session; a kid's iPad holds one kid session per linked sibling, and the
- * kid picks who's using it. Tokens live in the Keychain (expo-secure-store),
+ * session, plus a kid session for each kid whose view the parent opened on
+ * it; a kid's iPad holds one kid session per linked sibling, and the kid
+ * picks who's using it. Tokens live in the Keychain (expo-secure-store),
  * one key per person; the index holds no secrets.
  */
 export interface StoredSession {
@@ -30,6 +31,8 @@ interface SessionState {
   signIn: (auth: AuthResponse) => Promise<void>
   switchTo: (memberId: string) => Promise<void>
   signOut: (memberId?: string) => Promise<void>
+  /** Sign everyone on this device out (a parent signing out). */
+  signOutAll: () => Promise<void>
   /** Re-read /me (e.g. after creating the family) and store the result. */
   refresh: () => Promise<MeResponse | null>
 }
@@ -59,7 +62,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const activate = useCallback(
     async (list: StoredSession[], memberId?: string | null) => {
-      const pick = list.find((s) => s.member.id === memberId) ?? list[0]
+      // With no explicit pick, never fall back into a parent's view when a
+      // kid is also on this phone: getting there takes the parent's Face ID.
+      const pick =
+        list.find((s) => s.member.id === memberId) ??
+        list.find((s) => s.kind === "kid") ??
+        list[0]
       const token = pick
         ? await SecureStore.getItemAsync(tokenKey(pick.member.id))
         : null
@@ -91,16 +99,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         member: auth.member,
         family: auth.family,
       }
-      // A parent sign-in replaces everything; kid sessions stack (siblings).
+      // A parent sign-in replaces everything; kid sessions stack (siblings,
+      // or kids whose view a parent opened on their own phone).
       const list =
         auth.kind === "parent"
           ? [entry]
-          : [
-              ...all.filter(
-                (s) => s.kind === "kid" && s.member.id !== auth.member.id
-              ),
-              entry,
-            ]
+          : [...all.filter((s) => s.member.id !== auth.member.id), entry]
       await writeIndex(list)
       await activate(list, auth.member.id)
     },
@@ -126,6 +130,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     [all, current, activate]
   )
 
+  const signOutAll = useCallback(async () => {
+    for (const s of all) {
+      const token = await SecureStore.getItemAsync(tokenKey(s.member.id))
+      if (token) await call("signOut", { token, body: {} }).catch(() => {})
+      await SecureStore.deleteItemAsync(tokenKey(s.member.id))
+    }
+    await writeIndex([])
+    await activate([], null)
+  }, [all, activate])
+
   const refresh = useCallback(async () => {
     if (!current) return null
     try {
@@ -148,8 +162,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, [all, current, signOut])
 
   const value = useMemo(
-    () => ({ status, current, all, signIn, switchTo, signOut, refresh }),
-    [status, current, all, signIn, switchTo, signOut, refresh]
+    () => ({
+      status,
+      current,
+      all,
+      signIn,
+      switchTo,
+      signOut,
+      signOutAll,
+      refresh,
+    }),
+    [status, current, all, signIn, switchTo, signOut, signOutAll, refresh]
   )
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
