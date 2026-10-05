@@ -40,6 +40,8 @@ export default function CreateFamily() {
       <Body muted>You can add a second parent and your kids next.</Body>
       <Field
         label="Family name"
+        autoCorrect={false}
+        spellCheck={false}
         value={familyName}
         onChangeText={setFamilyName}
         placeholder="The Ruhl family"
@@ -47,6 +49,8 @@ export default function CreateFamily() {
       />
       <Field
         label="What should your kids see you as?"
+        autoCorrect={false}
+        spellCheck={false}
         value={parentName}
         onChangeText={setParentName}
         placeholder="Dad"
