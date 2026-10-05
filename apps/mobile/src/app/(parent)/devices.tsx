@@ -20,7 +20,7 @@ function lastSeen(iso: string | null) {
 
 export default function Devices() {
   const c = useColors()
-  const { current, signOut } = useSession()
+  const { current, signOutAll } = useSession()
   const [devices, setDevices] = useState<Device[] | null>(null)
   const [confirming, setConfirming] = useState<string | null>(null)
   const [error, setError] = useState("")
@@ -48,7 +48,7 @@ export default function Devices() {
         token: current.token,
         params: { deviceId: d.id },
       })
-      if (d.isThisDevice) return signOut()
+      if (d.isThisDevice) return signOutAll()
       setConfirming(null)
       load()
     } catch (e) {

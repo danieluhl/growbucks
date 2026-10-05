@@ -58,6 +58,10 @@ sketches: `docs/design/feature-sketches.html`.
   session. Siblings can share a device (one kid session each, switcher on the
   kid home). Parents remove devices from Devices; that revokes every
   session on it.
+- A parent can also open a kid's view on their own phone
+  (`POST /kids/:kidId/session`, a kid session on the parent's device). The
+  kid home then shows "Parent view", which needs the phone's Face ID or
+  passcode (`apps/mobile/src/lib/parent-check.ts`).
 - The app keeps tokens in the Keychain via expo-secure-store
   (`apps/mobile/src/lib/session.tsx`).
 
