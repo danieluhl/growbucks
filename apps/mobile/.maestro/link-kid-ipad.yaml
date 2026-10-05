@@ -1,0 +1,18 @@
+# High-level flow: a kid's device links with a pairing code.
+# Needs the API running (`pnpm dev:api`) and a fresh code from a parent device:
+#   PAIR_CODE=K7MQ-4XRT maestro test .maestro/link-kid-ipad.yaml
+appId: cash.growbucks.app
+env:
+  PAIR_CODE: ${PAIR_CODE}
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: "welcome-kid"
+- tapOn: "Type the code"
+- tapOn:
+    id: "pair-code"
+- inputText: ${PAIR_CODE}
+- tapOn:
+    id: "pair-submit"
+- assertVisible: "This iPad is linked.*"

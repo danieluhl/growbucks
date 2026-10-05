@@ -1,0 +1,1128 @@
+<title>GrowBucks Feature Sketches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Baloo+2:wght@600;700;800&display=swap">
+<style>
+/* Layout: a review sheet. Intro + decision, then phone-frame sketches in rows
+   (kid, then parent), then the feature ballot, then tone samples. */
+:root {
+  --bg: oklch(0.975 0.01 140);
+  --surface: oklch(1 0 0);
+  --sunken: oklch(0.95 0.015 140);
+  --fg: oklch(0.24 0.03 155);
+  --muted: oklch(0.5 0.03 150);
+  --line: oklch(0.89 0.02 140);
+  --leaf: oklch(0.52 0.13 150);
+  --leaf-soft: oklch(0.93 0.05 150);
+  --on-leaf: oklch(0.99 0.01 140);
+  --sun: oklch(0.72 0.15 75);
+  --sun-soft: oklch(0.95 0.06 90);
+  --sky: oklch(0.58 0.12 235);
+  --sky-soft: oklch(0.94 0.035 235);
+  --berry: oklch(0.58 0.17 20);
+  --berry-soft: oklch(0.95 0.035 20);
+  --soil: oklch(0.45 0.05 60);
+  --frame: oklch(0.24 0.03 155);
+
+  --f-display: "Baloo 2", ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-num: "Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: oklch(0.18 0.02 155); --surface: oklch(0.225 0.025 155); --sunken: oklch(0.2 0.02 155);
+    --fg: oklch(0.95 0.015 140); --muted: oklch(0.73 0.03 150); --line: oklch(0.32 0.03 155);
+    --leaf: oklch(0.74 0.15 150); --leaf-soft: oklch(0.3 0.06 150); --on-leaf: oklch(0.2 0.04 155);
+    --sun: oklch(0.83 0.14 85); --sun-soft: oklch(0.32 0.06 85);
+    --sky: oklch(0.74 0.12 235); --sky-soft: oklch(0.3 0.05 235);
+    --berry: oklch(0.72 0.15 22); --berry-soft: oklch(0.3 0.06 22);
+    --soil: oklch(0.7 0.06 60); --frame: oklch(0.08 0.01 155);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: oklch(0.18 0.02 155); --surface: oklch(0.225 0.025 155); --sunken: oklch(0.2 0.02 155);
+  --fg: oklch(0.95 0.015 140); --muted: oklch(0.73 0.03 150); --line: oklch(0.32 0.03 155);
+  --leaf: oklch(0.74 0.15 150); --leaf-soft: oklch(0.3 0.06 150); --on-leaf: oklch(0.2 0.04 155);
+  --sun: oklch(0.83 0.14 85); --sun-soft: oklch(0.32 0.06 85);
+  --sky: oklch(0.74 0.12 235); --sky-soft: oklch(0.3 0.05 235);
+  --berry: oklch(0.72 0.15 22); --berry-soft: oklch(0.3 0.06 22);
+  --soil: oklch(0.7 0.06 60); --frame: oklch(0.08 0.01 155);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 80px; display: flex; flex-direction: column; gap: 64px; }
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.05; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 800; color: var(--leaf); }
+h2 { font-size: 2rem; font-weight: 700; }
+h3 { font-size: 1.35rem; font-weight: 700; }
+p { margin: 0; }
+.lede { max-width: 62ch; font-size: 1.1rem; color: var(--muted); }
+.eyebrow { font-family: var(--f-num); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; }
+section { display: flex; flex-direction: column; gap: 24px; }
+.section-head { display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
+.section-head p { color: var(--muted); }
+
+/* intro */
+.intro { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.direction { display: flex; flex-direction: column; gap: 14px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.sw { display: flex; flex-direction: column; gap: 6px; font-size: .8rem; }
+.sw i { display: block; height: 44px; border-radius: 10px; }
+.sw b { font-weight: 700; }
+.sw span { color: var(--muted); line-height: 1.25; }
+.type-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: baseline; border-top: 1px solid var(--line); padding-top: 12px; }
+.type-row .d { font-family: var(--f-display); font-size: 1.6rem; font-weight: 800; }
+.type-row .b { font-size: .95rem; }
+.type-row .n { font-family: var(--f-num); font-size: 1.1rem; }
+
+/* decision */
+.decision { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 28px; border-radius: var(--r); background: var(--sun-soft); border: 1px solid color-mix(in oklch, var(--sun) 40%, transparent); }
+.decision p + p { margin-top: 10px; }
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: right; padding: 10px 12px; border-bottom: 1px solid color-mix(in oklch, var(--sun) 30%, transparent); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-family: var(--f-num); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+tr.rec td { font-weight: 700; }
+tr.rec td:first-child::after { content: "recommended"; margin-left: 8px; font-family: var(--f-num); font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; background: var(--leaf); color: var(--on-leaf); padding: 2px 6px; border-radius: 99px; vertical-align: 2px; }
+
+/* phones */
+.phones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.shot { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.shot figcaption { display: flex; flex-direction: column; gap: 4px; }
+.shot figcaption p { color: var(--muted); font-size: .92rem; }
+figure { margin: 0; }
+.phone { background: var(--frame); border-radius: 34px; padding: 10px; max-width: 330px; width: 100%; margin-inline: auto; }
+.screen { background: var(--bg); border-radius: 26px; min-height: 600px; padding: 18px 16px 20px; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+.sbar { gap: 8px; display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--muted); }
+.who { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--fg); font-size: .95rem; }
+.av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--leaf-soft); color: var(--leaf); font-family: var(--f-display); font-weight: 800; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.big { font-family: var(--f-num); font-size: 2.6rem; font-weight: 600; line-height: 1; letter-spacing: -.02em; }
+.grew { display: inline-flex; gap: 6px; align-items: center; font-weight: 700; color: var(--sun); font-size: .95rem; }
+.pill { white-space: nowrap; flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 99px; font-size: .75rem; font-weight: 700; }
+.p-leaf { background: var(--leaf-soft); color: var(--leaf); }
+.p-sun { background: var(--sun-soft); color: var(--sun); }
+.p-sky { background: var(--sky-soft); color: var(--sky); }
+.p-berry { background: var(--berry-soft); color: var(--berry); }
+.p-muted { background: var(--sunken); color: var(--muted); }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.small { font-size: .82rem; color: var(--muted); }
+.saying { font-family: var(--f-display); font-size: 1.15rem; font-weight: 700; line-height: 1.15; color: var(--leaf); }
+.meter { height: 10px; border-radius: 99px; background: var(--sunken); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 99px; background: var(--leaf); }
+.tabs { display: flex; gap: 4px; background: var(--sunken); padding: 4px; border-radius: 12px; }
+.tabs span { flex: 1; text-align: center; font-size: .78rem; font-weight: 700; padding: 6px 4px; border-radius: 9px; color: var(--muted); }
+.tabs span.on { background: var(--surface); color: var(--fg); }
+.nav { margin-top: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding-top: 10px; border-top: 1px solid var(--line); font-size: .7rem; text-align: center; color: var(--muted); font-weight: 700; }
+.nav span.on { color: var(--leaf); }
+.nav svg { display: block; margin: 0 auto 2px; }
+.btn { font: inherit; font-weight: 700; font-size: .85rem; border-radius: 10px; padding: 8px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.btn.pri { background: var(--leaf); color: var(--on-leaf); border-color: var(--leaf); }
+.btn.sm { padding: 5px 9px; font-size: .78rem; }
+.btn:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid color-mix(in oklch, var(--leaf) 55%, transparent); outline-offset: 2px; }
+.quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.quick .btn { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px; }
+.quick .btn b { font-family: var(--f-num); font-size: 1rem; }
+.tx { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: .88rem; gap: 8px; }
+.tx:last-child { border-bottom: 0; }
+.tx .amt { font-family: var(--f-num); font-weight: 600; }
+.pos { color: var(--leaf); } .neg { color: var(--berry); } .int { color: var(--sun); }
+.check { display: flex; align-items: center; gap: 8px; font-size: .88rem; padding: 4px 0; }
+.box { width: 18px; height: 18px; border-radius: 6px; border: 2px solid var(--line); flex: none; display: grid; place-items: center; }
+.box.on { background: var(--leaf); border-color: var(--leaf); }
+.box.on::after { content: ""; width: 8px; height: 4px; border-left: 2px solid var(--on-leaf); border-bottom: 2px solid var(--on-leaf); transform: rotate(-45deg) translate(1px, -1px); }
+.field { display: flex; flex-direction: column; gap: 4px; font-size: .8rem; color: var(--muted); }
+.field .in { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--surface); color: var(--fg); font-family: var(--f-num); font-size: .95rem; }
+.seg { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.seg span { text-align: center; font-size: .72rem; font-weight: 700; padding: 6px 0; border-radius: 8px; background: var(--sunken); color: var(--muted); }
+.seg span.on { background: var(--leaf); color: var(--on-leaf); }
+svg text { font-family: var(--f-num); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: .72rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend i.dash { height: 0; width: 14px; border-top: 2px dashed var(--sky); border-radius: 0; }
+.bars { display: flex; flex-direction: column; gap: 9px; }
+.bar { display: flex; flex-direction: column; gap: 3px; font-size: .78rem; }
+.bar .track { height: 18px; background: var(--sunken); border-radius: 6px; overflow: hidden; }
+.bar .fill { height: 100%; border-radius: 6px; transition: width .25s ease; }
+.bar .row b { font-family: var(--f-num); }
+input[type=range] { width: 100%; accent-color: var(--leaf); }
+.callout { background: var(--sky-soft); color: var(--fg); border-radius: 12px; padding: 10px 12px; font-size: .88rem; }
+.callout b { color: var(--sky); font-family: var(--f-num); }
+
+.boost { background: var(--sun-soft); border: 1px solid color-mix(in oklch, var(--sun) 45%, transparent); }
+.boost .x { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; line-height: 1; color: var(--sun); }
+.ticker { font-family: var(--f-num); font-weight: 600; color: var(--sun); font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.seg3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: var(--sunken); padding: 3px; border-radius: 10px; }
+.seg3 span { text-align: center; font-size: .78rem; font-weight: 700; padding: 6px 0; border-radius: 8px; color: var(--muted); }
+.seg3 span.on { background: var(--surface); color: var(--fg); box-shadow: 0 1px 2px color-mix(in oklch, var(--fg) 15%, transparent); }
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.flow div { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px; background: var(--surface); }
+.flow b { font-family: var(--f-display); font-size: 1.05rem; }
+.flow span { font-size: .88rem; color: var(--muted); }
+.group-h { font-family: var(--f-num); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; padding: 20px 0 6px; border-bottom: 1px solid var(--line); }
+
+/* ballot */
+.ballot { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.feat { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 20px; align-items: start; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.feat .tier { font-family: var(--f-num); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; padding-top: 4px; font-weight: 600; }
+.tier.mvp { color: var(--leaf); } .tier.next { color: var(--sky); } .tier.maybe { color: var(--muted); }
+.feat .body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.feat .body p { color: var(--muted); max-width: 68ch; }
+.feat .who-tag { display: inline-flex; gap: 6px; margin-top: 4px; }
+.vote { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.vote button { font: inherit; font-size: .8rem; font-weight: 700; padding: 8px 12px; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+.vote button + button { border-left: 1px solid var(--line); }
+.vote button[aria-pressed="true"][data-v="build"] { background: var(--leaf); color: var(--on-leaf); }
+.vote button[aria-pressed="true"][data-v="later"] { background: var(--sky-soft); color: var(--sky); }
+.vote button[aria-pressed="true"][data-v="skip"] { background: var(--berry-soft); color: var(--berry); }
+.export { display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.export textarea { width: 100%; min-height: 90px; font: inherit; font-size: .95rem; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); resize: vertical; }
+.export .row { justify-content: flex-start; flex-wrap: wrap; }
+.export pre { margin: 0; white-space: pre-wrap; font-family: var(--f-num); font-size: .82rem; background: var(--sunken); padding: 12px; border-radius: 10px; max-height: 260px; overflow: auto; }
+#copied { color: var(--leaf); font-weight: 700; font-size: .9rem; }
+
+/* tone */
+.sayings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.say { padding: 18px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.say q { font-family: var(--f-display); font-size: 1.35rem; font-weight: 700; line-height: 1.15; quotes: none; }
+.say .k { font-family: var(--f-num); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.say p { color: var(--muted); font-size: .92rem; }
+.say.story { grid-column: span 2; background: var(--leaf-soft); border-color: transparent; }
+.say.story p { color: var(--fg); font-size: 1rem; max-width: 60ch; }
+
+@media (max-width: 960px) {
+  .phones { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .intro, .decision { grid-template-columns: minmax(0, 1fr); }
+  .sayings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .wrap { padding-inline: 16px; gap: 48px; }
+  .phones, .sayings { grid-template-columns: minmax(0, 1fr); }
+  .say.story { grid-column: auto; }
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .feat { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .decision { padding: 20px; }
+  .swatches { grid-template-columns: repeat(2, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .bar .fill { transition: none; } }
+
+/* ---- task rewards prototype ---- */
+.screen.play { position: relative; gap: 10px; }
+.today-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; }
+.ring { width: 64px; height: 64px; position: relative; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 7; }
+.ring .bg { stroke: var(--sunken); }
+.ring .fg { stroke: var(--leaf); stroke-linecap: round; transition: stroke-dashoffset .6s cubic-bezier(.2,.9,.3,1.2); }
+.ring b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--f-num); font-size: .85rem; }
+.rate-now { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.rate-now .r { font-family: var(--f-num); font-weight: 600; font-size: 1.15rem; color: var(--leaf); transition: transform .3s; }
+.rate-now .r.bump { transform: scale(1.15); }
+.task-group { display: flex; flex-direction: column; gap: 2px; }
+.group-label { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: .72rem; font-weight: 700; color: var(--muted); padding: 4px 2px; }
+.group-label .dots { display: inline-flex; gap: 3px; }
+.group-label .dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+.group-label .dots i.on { background: var(--leaf); }
+.task { display: grid; grid-template-columns: 26px 22px minmax(0, 1fr) auto; gap: 8px; align-items: center; width: 100%; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; font-size: .88rem; text-align: left; cursor: pointer; position: relative; }
+.task:hover { border-color: color-mix(in oklch, var(--leaf) 45%, var(--line)); }
+.task .cb { width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--line); display: grid; place-items: center; transition: transform .2s; }
+.task[aria-pressed="true"] .cb { background: var(--leaf); border-color: var(--leaf); }
+.task[aria-pressed="true"] .cb::after { content: ""; width: 9px; height: 5px; border-left: 2.5px solid var(--on-leaf); border-bottom: 2.5px solid var(--on-leaf); transform: rotate(-45deg) translate(1px, -1px); }
+.task.pend .cb { background: var(--sun-soft); border-color: var(--sun); }
+.task.pend .cb::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--soil); }
+.task.pop .cb { animation: pop .35s ease; }
+@keyframes pop { 40% { transform: scale(1.35); } }
+.task .em { font-size: 1.05rem; line-height: 1; }
+.task .t { min-width: 0; line-height: 1.2; }
+.task .t small { display: block; color: var(--muted); font-size: .7rem; }
+.task[aria-pressed="true"] .t { color: var(--muted); }
+.chip { font-family: var(--f-num); font-size: .74rem; font-weight: 600; padding: 3px 7px; border-radius: 8px; text-align: right; line-height: 1.15; white-space: nowrap; }
+.chip small { display: block; font-size: .64rem; opacity: .8; }
+.chip.rate { background: var(--sun-soft); color: var(--sun); }
+.chip.cash { background: var(--leaf-soft); color: var(--leaf); }
+.task[aria-pressed="true"] .chip.rate { background: var(--sun); color: var(--on-leaf); }
+.task[aria-pressed="true"] .chip.cash { background: var(--leaf); color: var(--on-leaf); }
+.fx { position: absolute; inset: 0; pointer-events: none; border-radius: 26px; overflow: hidden; z-index: 5; }
+.fx canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.float { position: absolute; z-index: 6; pointer-events: none; font-family: var(--f-num); font-weight: 700; font-size: .85rem; color: var(--sun); background: var(--surface); border: 1px solid var(--sun); padding: 4px 9px; border-radius: 99px; white-space: nowrap; animation: floatUp 1.1s ease-out forwards; box-shadow: 0 4px 12px color-mix(in oklch, var(--fg) 12%, transparent); }
+.float.cash { color: var(--leaf); border-color: var(--leaf); }
+.float.big { font-size: 1rem; padding: 6px 12px; animation-duration: 1.5s; }
+@keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 0) scale(.7); } 15% { opacity: 1; transform: translate(-50%, -8px) scale(1.05); } 70% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -54px) scale(1); } }
+.celebrate { position: absolute; inset: 0; z-index: 7; display: grid; place-items: center; padding: 20px; border-radius: 26px; background: color-mix(in oklch, var(--bg) 70%, transparent); backdrop-filter: blur(3px); animation: fadeIn .25s ease; cursor: pointer; }
+.celebrate[hidden] { display: none; }
+.cel-card { position: relative; z-index: 1; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 20px 16px 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; animation: rise .5s cubic-bezier(.2,.9,.3,1.3); box-shadow: 0 18px 40px color-mix(in oklch, var(--fg) 18%, transparent); }
+.cel-card h4 { font-family: var(--f-display); font-size: 1.6rem; font-weight: 800; color: var(--leaf); }
+.cel-card .amt { font-family: var(--f-num); font-weight: 600; font-size: 2.2rem; line-height: 1; color: var(--sun); }
+.cel-card ul { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 4px; font-size: .85rem; }
+.cel-card li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 10px; border-radius: 10px; background: var(--sunken); }
+.cel-card li b { font-family: var(--f-num); }
+.cel-card .grow { animation: growIn .9s cubic-bezier(.2,.9,.3,1.4); transform-origin: 50% 100%; }
+.celebrate.jackpot { background: color-mix(in oklch, var(--sun-soft) 85%, transparent); }
+.celebrate.jackpot .rays { position: absolute; inset: -40%; background: repeating-conic-gradient(from 0deg, color-mix(in oklch, var(--sun) 28%, transparent) 0 10deg, transparent 10deg 20deg); animation: spin 14s linear infinite; }
+.celebrate.jackpot .cel-card { border-color: var(--sun); }
+.celebrate.jackpot .cel-card .amt { font-size: 3rem; }
+.cel-card .tap { font-size: .75rem; color: var(--muted); }
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes rise { from { opacity: 0; transform: translateY(40px) scale(.9); } }
+@keyframes growIn { from { transform: scale(.4); opacity: 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+.play-controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.tiers { display: flex; flex-direction: column; gap: 0; }
+.tier-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.tier-row:last-child { border-bottom: 0; }
+.tier-row b { font-family: var(--f-display); font-size: 1.1rem; }
+.tier-row p { font-size: .85rem; color: var(--muted); }
+.tier-row .when { font-family: var(--f-num); font-size: .72rem; color: var(--fg); }
+.budget { display: flex; flex-direction: column; gap: 6px; }
+@media (prefers-reduced-motion: reduce) {
+  .float, .cel-card, .celebrate, .cel-card .grow, .task.pop .cb { animation: none !important; }
+  .celebrate.jackpot .rays { animation: none; }
+  .ring .fg { transition: none; }
+}
+
+/* ---- device linking ---- */
+.link-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 28px; align-items: start; }
+.tablet { background: var(--frame); border-radius: 28px; padding: 14px; width: 100%; max-width: 640px; margin-inline: auto; }
+.tablet .screen { min-height: 0; aspect-ratio: 4 / 3; border-radius: 16px; padding: 22px 26px; }
+.qr { width: 150px; height: 150px; margin: 0 auto; padding: 8px; background: #fff; border-radius: 12px; }
+.qr canvas { width: 100%; height: 100%; image-rendering: pixelated; display: block; }
+.code-big { font-family: var(--f-num); font-size: 1.7rem; letter-spacing: .12em; text-align: center; font-weight: 600; }
+.ipad-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; flex: 1; min-height: 0; }
+.viewfinder { position: relative; border-radius: 16px; background: linear-gradient(135deg, color-mix(in oklch, var(--fg) 70%, var(--bg)), color-mix(in oklch, var(--fg) 88%, var(--bg))); display: grid; place-items: center; min-height: 150px; }
+.viewfinder i { position: absolute; width: 26px; height: 26px; border-color: var(--sun); border-style: solid; border-width: 0; }
+.viewfinder i:nth-child(1) { top: 22%; left: 28%; border-top-width: 4px; border-left-width: 4px; }
+.viewfinder i:nth-child(2) { top: 22%; right: 28%; border-top-width: 4px; border-right-width: 4px; }
+.viewfinder i:nth-child(3) { bottom: 22%; left: 28%; border-bottom-width: 4px; border-left-width: 4px; }
+.viewfinder i:nth-child(4) { bottom: 22%; right: 28%; border-bottom-width: 4px; border-right-width: 4px; }
+.viewfinder span { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; color: var(--bg); font-size: .8rem; font-weight: 700; }
+.kid-chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: .85rem; }
+.kid-chip.on { border-color: var(--leaf); background: var(--leaf-soft); color: var(--leaf); }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; counter-reset: st; }
+.steps div { display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.steps b { font-family: var(--f-display); font-size: 1.05rem; }
+.steps span { font-size: .88rem; color: var(--muted); }
+@media (max-width: 960px) { .link-grid { grid-template-columns: minmax(0, 1fr); } .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .ipad-split { grid-template-columns: minmax(0, 1fr); } .tablet .screen { aspect-ratio: auto; } .steps { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<div class="wrap">
+
+  <header class="intro">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <span class="eyebrow">GrowBucks · design review 3 · iPhone &amp; iPad · Sep 30, 2026</span>
+      <h1>A money garden kids can watch grow.</h1>
+      <p class="lede">GrowBucks is now an iPhone and iPad app. Kids can have their own iPad linked to the family. Round 2 changes are still in: interest compounds <b>daily</b> by default, parents set the rate and the compounding cadence, and parents can hit <b>Boost</b> to raise a kid's rate for one week. The numbers in every sketch are live, computed with the interest engine that's now in the codebase.</p>
+    </div>
+    <aside class="direction" aria-label="Visual direction">
+      <span class="eyebrow">Visual direction</span>
+      <div class="swatches">
+        <div class="sw"><i style="background:var(--leaf)"></i><b>Leaf</b><span>saving, growth, primary</span></div>
+        <div class="sw"><i style="background:var(--sun)"></i><b>Sun</b><span>interest, the "free money"</span></div>
+        <div class="sw"><i style="background:var(--sky)"></i><b>Sky</b><span>what-ifs, projections</span></div>
+        <div class="sw"><i style="background:var(--berry)"></i><b>Berry</b><span>spending</span></div>
+      </div>
+      <div class="type-row">
+        <span class="d">Baloo 2</span>
+        <span class="b">Atkinson Hyperlegible, built for young readers</span>
+        <span class="n">+6.9¢ today</span>
+      </div>
+    </aside>
+  </header>
+
+  <section aria-labelledby="rate-h">
+    <div class="decision">
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0;max-width:72ch">
+        <span class="eyebrow">Settled · rates &amp; compounding</span>
+        <h2 id="rate-h">Small rate, every day, fully adjustable</h2>
+        <p>Parents choose how often interest compounds (<b>daily</b>, weekly or monthly) and set a rate floor and ceiling for that period. Daily tasks move the kid between them. The default is daily at <b>0.10%–0.20% a day</b>. That's low enough to be believable and still shows up as a few cents every day on a small balance.</p>
+        <p>Whatever the cadence, interest is worked out every day, so the kid can always see what their money made today. On weekly or monthly cadence, it builds up and lands in the balance on payday or at the end of the month. Fractions of a cent carry over, so tiny balances still grow.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Cadence</th><th>Default floor–ceiling</th><th>Maya made today<br>on <span id="rate-bal">$0</span></th><th>Lands in balance</th><th>Same growth as</th></tr></thead>
+          <tbody id="rate-rows"></tbody>
+        </table>
+      </div>
+      <div class="flow" aria-label="What happens each day">
+        <div><b>1 · Grow</b><span>Interest builds on what the kid kept at the start of the day.</span></div>
+        <div><b>2 · Land</b><span>At the end of the period, whole cents join the balance. Fractions wait for tomorrow.</span></div>
+        <div><b>3 · Allowance</b><span>On payday the allowance arrives, after interest, so it starts growing tomorrow.</span></div>
+        <div><b>4 · Boost</b><span>During a boost week, step 1 is multiplied (2× by default).</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="kid-h">
+    <div class="section-head">
+      <span class="eyebrow">Kid screens · look, explore, propose</span>
+      <h2 id="kid-h">Maya's garden</h2>
+      <p>Example kid: Maya started with $20 six weeks ago, gets $5 every Saturday, and spent $8 on stickers in week 3. Her rate is 0.16% a day (3 of 5 daily tasks done), and a parent boosted her on Monday for a great report card.</p>
+    </div>
+    <div class="phones">
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av">M</span>Maya's garden</div><span class="pill p-muted">Payday in 3 days</span></div>
+          <div class="card boost" style="flex-direction:row;align-items:center;gap:12px">
+            <span class="x">2×</span>
+            <div style="display:flex;flex-direction:column;flex:1;min-width:0"><b style="font-size:.9rem">Boost week! Until Sunday</b><span class="small">"Great report card!" from Dad</span></div>
+          </div>
+          <div class="card" style="align-items:center;text-align:center;gap:4px;padding-block:14px">
+            <svg id="plant" width="120" height="104" viewBox="0 0 120 104" aria-hidden="true"></svg>
+            <span class="small">You have</span>
+            <span class="big" id="k-bal">$0.00</span>
+            <span class="ticker" id="k-today" aria-live="off">+0.0¢</span>
+            <span class="small">your money made so far today</span>
+          </div>
+          <div class="card">
+            <div class="row"><span class="small">Your stage</span><span class="pill p-leaf" id="k-stage">Sapling</span></div>
+            <div class="meter"><i id="k-stage-meter" style="width:60%"></i></div>
+            <span class="small" id="k-stage-next">$12.40 more to grow into a Tree</span>
+          </div>
+          <div class="card" style="background:var(--leaf-soft);border-color:transparent">
+            <span class="eyebrow">Money seed</span>
+            <p class="saying">"Interest is your money doing chores for you."</p>
+          </div>
+          <div class="card">
+            <div class="row"><span class="small">Doubling trick</span><span class="pill p-sun" id="k-72">72 ÷ 0.16</span></div>
+            <p style="font-size:.9rem">If you keep saving, your money <b>doubles in about <span id="k-double">15 months</span></b>, without any extra tasks.</p>
+          </div>
+          <nav class="nav" aria-hidden="true">
+            <span class="on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V11M12 11C12 7 9 4 4 4c0 4 3 7 8 7zm0 0c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg>Garden</span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg>Growth</span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>What if</span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>Tasks</span>
+          </nav>
+        </div></div>
+        <figcaption><h3>Garden (home)</h3><p>Balance, a live counter of what the money made today (it ticks up through the day), the boost banner when one is on, a plant that levels up (seed → sprout → sapling → tree → orchard), a rotating saying, and the doubling trick.</p></figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av">M</span>Growth</div><span class="pill p-muted">14 weeks</span></div>
+          <div class="tabs" aria-hidden="true"><span>1 mo</span><span class="on">3 mo</span><span>1 yr</span></div>
+          <div class="card" style="gap:10px">
+            <svg id="growth-chart" viewBox="0 0 280 200" width="100%" role="img" aria-label="Maya's balance over 14 weeks"></svg>
+            <div class="legend">
+              <span><i style="background:var(--leaf)"></i>You put in</span>
+              <span><i style="background:var(--sun)"></i>Interest grew</span>
+              <span><i class="dash"></i>If you'd kept it all</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row"><span class="small">Interest so far</span><b class="num int" id="g-int">$0.00</b></div>
+            <div class="row"><span class="small">Those stickers would be worth today</span><b class="num neg" id="g-cost">$0.00</b></div>
+            <div class="row"><span class="small">In 8 more weeks, if you keep saving</span><b class="num pos" id="g-future">$0.00</b></div>
+          </div>
+          <p class="small">The dashed line keeps going to show where saving takes you. The part after "today" is a projection.</p>
+        </div></div>
+        <figcaption><h3>Growth chart</h3><p>What Maya has, split into what she put in and what interest added, against the "if you kept every dollar" line from the README. It also shows how much a past purchase would be worth now.</p></figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av">M</span>What if…</div><span class="pill p-sky">Try it</span></div>
+          <div class="card">
+            <label class="row small" for="wi-weeks"><span>Look ahead</span><b class="num" id="wi-weeks-out" style="color:var(--fg)">8 weeks</b></label>
+            <input id="wi-weeks" type="range" min="1" max="52" value="8">
+            <div class="bars" id="wi-bars"></div>
+          </div>
+          <div class="card">
+            <span class="eyebrow">Spend now or later?</span>
+            <label class="row small" for="wi-amt"><span>Buy something for</span><b class="num" id="wi-amt-out" style="color:var(--fg)">$40</b></label>
+            <input id="wi-amt" type="range" min="5" max="60" step="5" value="40">
+            <div class="callout" id="wi-callout"></div>
+          </div>
+        </div></div>
+        <figcaption><h3>What-if lab</h3><p>The README scenarios as sliders: save everything, spend only the interest, spend only the allowance, spend it all, and "spend $40 today or in a month?". Kids do the analysis here.</p></figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <section aria-labelledby="rw-h">
+    <div class="section-head">
+      <span class="eyebrow">Task rewards · try it</span>
+      <h2 id="rw-h">Check it off, see it pay</h2>
+      <p>Each task shows its reward before the kid taps it: a rate bump for today (sun) or cash (leaf). Finishing a set like Morning routine pays a bonus, and finishing every daily task is a Perfect Day. The celebration gets bigger with what the reward is worth to this kid. Tap the tasks on the left.</p>
+    </div>
+    <div class="phones">
+
+      <figure class="shot">
+        <div class="phone"><div class="screen play" id="play">
+          <div class="sbar"><div class="who"><span class="av">M</span>Today</div><span class="pill p-sun">2× boost</span></div>
+          <div class="today-head">
+            <div class="ring" aria-hidden="true"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="27"/><circle class="fg" id="ring-fg" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="169.6"/></svg><b id="ring-txt">0/5</b></div>
+            <div class="rate-now">
+              <span class="small">Today's rate</span>
+              <span class="r" id="rate-now">0.10%</span>
+              <span class="small">made so far <b class="num int" id="play-ticker">0.000¢</b></span>
+            </div>
+          </div>
+          <div id="task-list" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div class="fx" aria-hidden="true"><canvas id="fx"></canvas></div>
+          <div class="celebrate" id="cel" hidden role="dialog" aria-live="polite"></div>
+        </div></div>
+        <div class="play-controls">
+          <button class="btn sm" type="button" id="play-reset">Reset today</button>
+          <button class="btn sm" type="button" id="play-approve" disabled>Approve rake leaves (as Dad)</button>
+        </div>
+        <figcaption><h3>Kid: today's tasks</h3><p>The ring shows how much of today's list is done, and today's rate climbs with it. Unchecking the same day takes the reward back. Tasks a parent has to check plant a seed first and pay in full when approved.</p></figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av">M</span>Edit task</div><span class="pill p-muted">Parents only</span></div>
+          <div class="card" style="gap:12px">
+            <div class="field"><span>Task</span><span class="in" style="font-family:var(--f-body)">🛏 Make bed</span></div>
+            <div class="field"><span>Repeats</span><div class="seg3" aria-hidden="true"><span class="on">Daily</span><span>Weekly</span><span>Once</span></div></div>
+            <div class="field"><span>Reward</span><div class="seg3" aria-hidden="true"><span class="on">Rate</span><span>Cash</span><span>None</span></div></div>
+            <div class="row" style="gap:10px;align-items:flex-end">
+              <div class="field" style="flex:1"><span>Adds to today's rate</span><span class="in">+0.02%</span></div>
+              <span class="pill p-leaf" style="margin-bottom:8px">Split evenly</span>
+            </div>
+            <div class="field"><span>Part of a set</span><span class="in" style="font-family:var(--f-body)">Morning routine</span></div>
+            <div class="field"><span>Who checks it</span><div class="seg3" style="grid-template-columns:1fr 1fr" aria-hidden="true"><span class="on">Trust Maya</span><span>I check</span></div></div>
+          </div>
+          <div class="card budget">
+            <div class="row"><span class="eyebrow">Daily rate budget</span><b class="num" style="font-size:.8rem">0.10% of 0.10%</b></div>
+            <div class="meter"><i style="width:100%;background:var(--sun)"></i></div>
+            <span class="small">Floor 0.10% + up to 0.10% from tasks = 0.20% ceiling. Rewards can't add up to more than the ceiling allows.</span>
+          </div>
+          <div class="card" style="gap:6px">
+            <span class="eyebrow">Sets</span>
+            <div class="row" style="font-size:.88rem"><span>Morning routine · 2 tasks</span><b class="num pos">+$0.25</b></div>
+            <div class="row" style="font-size:.88rem"><span>Perfect day · every daily task</span><b class="num pos">+$0.50</b></div>
+          </div>
+        </div></div>
+        <figcaption><h3>Parent: rewards per task</h3><p>Every task gets a rate bump (daily tasks only), cash, or no reward. "Split evenly" keeps rate rewards adding up to exactly the ceiling. Sets and Perfect Day can pay cash or rate. Parents choose trust or check for each task.</p></figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="card" style="gap:4px;padding:18px">
+          <span class="eyebrow">Celebration size</span>
+          <p class="small" style="margin-bottom:6px">Size depends on what the reward is worth today compared with the kid's weekly allowance ($5 for Maya). Rate rewards count as the extra cents they earn today. Tap Play to see each one.</p>
+          <div class="tiers">
+            <div class="tier-row"><div><b>Sprout</b> <span class="when">under 5%</span><p>A chip floats up from the task, the ring fills, the rate ticks up. About 1 second.</p></div><button class="btn sm" type="button" data-tier="1">Play</button></div>
+            <div class="tier-row"><div><b>Bloom</b> <span class="when">5–25% · any finished set</span><p>Coins burst from the checkbox and the chip is bigger. About 1.5 seconds.</p></div><button class="btn sm" type="button" data-tier="2">Play</button></div>
+            <div class="tier-row"><div><b>Harvest</b> <span class="when">25–100% · Perfect Day</span><p>A card rises over the screen, the plant grows, coins rain down, and every reward is listed. Tap to close.</p></div><button class="btn sm" type="button" data-tier="3">Play</button></div>
+            <div class="tier-row"><div><b>Jackpot</b> <span class="when">a week's allowance or more</span><p>Full screen with sun rays, leaves and coins, and a big count-up. Stays until the kid taps.</p></div><button class="btn sm" type="button" data-tier="4">Play</button></div>
+          </div>
+        </div>
+        <figcaption><h3>How big, and why</h3><p>One tap can finish a task, a set and the day at once. The kid then gets <b>one</b> celebration at the biggest size, listing each reward. Reduced-motion settings get the same information with no movement.</p></figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <section aria-labelledby="parent-h">
+    <div class="section-head">
+      <span class="eyebrow">Parent screens · add, subtract, set the rules</span>
+      <h2 id="parent-h">The parent side</h2>
+      <p>Parents handle every add and subtract and all the settings. Interest and allowance post on payday automatically, so the manual work is mostly logging spending and approving tasks.</p>
+    </div>
+    <div class="phones">
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av" style="background:var(--sun-soft);color:var(--sun)">D</span>Ruhl family</div><span class="pill p-muted">2 kids</span></div>
+          <div class="tabs" aria-hidden="true"><span class="on">Maya</span><span>Leo</span></div>
+          <div class="card">
+            <div class="row"><span class="small">Maya's balance</span><span class="pill p-leaf" id="p-rate">0.16%/day</span></div>
+            <span class="big" style="font-size:2rem" id="p-bal">$0.00</span>
+          </div>
+          <div class="card boost" style="gap:6px">
+            <div class="row"><b style="font-size:.9rem">Boost is on · 2×</b><span class="pill p-sun">5 days left</span></div>
+            <span class="small">Started Mon for "Great report card!" Ends Sunday night.</span>
+            <div class="meter" style="background:color-mix(in oklch, var(--sun) 20%, transparent)"><i style="width:29%;background:var(--sun)"></i></div>
+          </div>
+          <div class="quick">
+            <button class="btn" type="button"><span class="small">Gift</span><b class="pos">+$</b></button>
+            <button class="btn" type="button"><span class="small">Bonus</span><b class="pos">+$</b></button>
+            <button class="btn" type="button"><span class="small">Spent</span><b class="neg">−$</b></button>
+          </div>
+          <div class="card" style="gap:0">
+            <span class="eyebrow" style="margin-bottom:4px">Recent</span>
+            <div id="p-ledger"></div>
+          </div>
+        </div></div>
+        <figcaption><h3>Family ledger &amp; boost</h3><p>One tap to log money in or out per kid. Daily interest rows are grouped by week so the list stays short. When no boost is running, the boost card turns into a <b>Boost for a week</b> button with an optional reason. One boost at a time; it ends by itself after 7 days.</p></figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av">M</span>Maya's tasks</div><span class="pill p-muted">This week</span></div>
+          <div class="card">
+            <span class="eyebrow">Daily tasks · set today's rate</span>
+            <div class="check"><span class="box on"></span>Make bed</div>
+            <div class="check"><span class="box on"></span>Feed Biscuit</div>
+            <div class="check"><span class="box on"></span>Clear dishes</div>
+            <div class="check"><span class="box"></span>Tidy room</div>
+            <div class="check"><span class="box"></span>Homework before screens</div>
+            <div class="meter" style="margin-top:4px"><i style="width:60%"></i></div>
+            <div class="row small"><span>0.10%</span><b class="num" id="c-rate" style="color:var(--leaf)">—</b><span>0.20%</span></div>
+          </div>
+          <div class="card">
+            <div class="row"><span class="eyebrow">Waiting for you</span><span class="pill p-sun">1 to approve</span></div>
+            <div class="row" style="font-size:.9rem"><span>Washed the car</span><span class="num pos">+$3.00</span></div>
+            <div class="row"><button class="btn sm" type="button">Not yet</button><button class="btn sm pri" type="button">Approve</button></div>
+          </div>
+          <div class="card" style="background:var(--sky-soft);border-color:transparent">
+            <div class="row"><span class="eyebrow">Maya proposes</span><span class="pill p-sky">New task</span></div>
+            <p style="font-size:.92rem"><b>Walk Biscuit, $1.50</b><br><span class="small" style="color:var(--fg)">"I'll do it every day after school, even when it's cold!"</span></p>
+            <div class="row"><button class="btn sm" type="button">Counter-offer</button><button class="btn sm pri" type="button">Accept</button></div>
+          </div>
+        </div></div>
+        <figcaption><h3>Tasks &amp; proposals</h3><p>What Maya has done today, what's waiting for a parent to check, and her pitches. Kids can suggest new tasks, prices or rate changes, and parents accept, decline or counter.</p></figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av">M</span>Maya's rules</div><span class="pill p-muted">Parents only</span></div>
+          <div class="card" style="gap:12px">
+            <div class="field"><span>Interest compounds</span>
+              <div class="seg3" aria-hidden="true"><span class="on">Daily</span><span>Weekly</span><span>Monthly</span></div>
+            </div>
+            <div class="row" style="gap:10px">
+              <div class="field" style="flex:1"><span>Floor / day</span><span class="in">0.10%</span></div>
+              <div class="field" style="flex:1"><span>Ceiling / day</span><span class="in">0.20%</span></div>
+            </div>
+            <p class="small" id="s-equiv">≈ 3.1% to 6.3% a month</p>
+            <div class="field"><span>Boost strength</span><span class="in">2× for 7 days</span></div>
+            <div class="field"><span>Weekly allowance</span><span class="in">$5.00</span></div>
+            <div class="field"><span>Payday</span>
+              <div class="seg" aria-hidden="true"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span class="on">S</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row"><span class="small">Let Maya propose rate changes</span><span class="pill p-leaf">On</span></div>
+            <div class="row"><span class="small">Cap per spend without asking</span><span class="num" style="font-size:.9rem">$10</span></div>
+          </div>
+        </div></div>
+        <figcaption><h3>Rules &amp; settings</h3><p>Per kid: compounding cadence, rate floor and ceiling for that cadence (with a monthly equivalent so parents can compare), boost strength, allowance, payday, PIN, and whether kids can propose rate changes. Switching cadence converts the rates so growth stays the same.</p></figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <section aria-labelledby="link-h">
+    <div class="section-head">
+      <span class="eyebrow">iPhone + iPad · linking a kid's device</span>
+      <h2 id="link-h">Maya gets her own iPad</h2>
+      <p>Parents sign in on their phone with an emailed code. A kid's iPad never gets a password: a parent shows a one-time code, the iPad scans it, and it stays signed in as that kid until a parent removes it.</p>
+    </div>
+    <div class="steps">
+      <div><b>1 · Parent taps "Link Maya's iPad"</b><span>Their phone shows a QR code and an 8-character code. It works once and expires in 10 minutes.</span></div>
+      <div><b>2 · Maya opens the app</b><span>On an iPad, "I'm a kid" comes first. She scans the QR, or types the code if the camera is off.</span></div>
+      <div><b>3 · Linked</b><span>The parent's screen flips to "Linked!" on its own. The iPad gets a kid-only sign-in: Maya can check tasks and explore, but can't change money or rules.</span></div>
+      <div><b>4 · Parents stay in control</b><span>Devices lists every linked phone and iPad. Removing one signs it out immediately. Siblings can share one iPad with a switcher.</span></div>
+    </div>
+    <div class="link-grid">
+      <figure class="shot">
+        <div class="phone"><div class="screen">
+          <div class="sbar"><div class="who"><span class="av" style="background:var(--sun-soft);color:var(--sun)">D</span>Link Maya's iPad</div></div>
+          <p class="small">On Maya's iPad, open GrowBucks, tap "I'm a kid", then scan this or type it in.</p>
+          <div class="card" style="align-items:center;gap:12px;padding-block:18px">
+            <div class="qr"><canvas id="qr-sketch" width="29" height="29" aria-label="QR code sketch"></canvas></div>
+            <span class="code-big">K7MQ-4XRT</span>
+            <span class="small">Works once · expires in 9:41</span>
+          </div>
+          <button class="btn" type="button">New code</button>
+          <div class="card" style="background:var(--leaf-soft);border-color:transparent">
+            <span class="eyebrow">A few seconds later</span>
+            <b style="font-family:var(--f-display);font-size:1.3rem;color:var(--leaf)">Linked!</b>
+            <span style="font-size:.9rem">Maya's iPad is now Maya's. She can open GrowBucks any time, no password needed.</span>
+          </div>
+        </div></div>
+        <figcaption><h3>Parent's iPhone</h3><p>The code stays on screen with a countdown. When the iPad links, this screen changes to "Linked!" by itself, with a haptic tap.</p></figcaption>
+      </figure>
+      <div style="display:flex;flex-direction:column;gap:28px;min-width:0">
+        <figure class="shot">
+          <div class="tablet"><div class="screen">
+            <div class="sbar"><span></span><span class="small">iPad</span></div>
+            <div class="ipad-split">
+              <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                <h3 style="font-size:1.7rem;color:var(--leaf)">Link to your family</h3>
+                <p class="small">Ask a parent to open GrowBucks, tap your name, then "Link a device".</p>
+                <div class="tabs" aria-hidden="true"><span class="on">Scan the code</span><span>Type the code</span></div>
+                <div class="card" style="gap:6px">
+                  <span class="small">Or type it</span>
+                  <span class="code-big" style="font-size:1.3rem;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg)">K7MQ-4XRT</span>
+                </div>
+              </div>
+              <div class="viewfinder" aria-hidden="true"><i></i><i></i><i></i><i></i><span>Point at the parent's phone</span></div>
+            </div>
+          </div></div>
+          <figcaption><h3>Kid's iPad: linking</h3><p>Big targets and a camera view. Codes use only easy-to-read letters and numbers (no 0/O or 1/I/L), so a kid can type one without mix-ups. A wrong or expired code says exactly what to do next.</p></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="tablet"><div class="screen" style="aspect-ratio:auto">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="kid-chip on"><span class="av">🌱</span>Maya</span>
+              <span class="kid-chip"><span class="av">🚀</span>Leo</span>
+            </div>
+            <div class="ipad-split">
+              <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                <span class="small">The Ruhl family</span>
+                <h3 style="font-size:1.9rem;color:var(--leaf)">Hi Maya</h3>
+                <div class="card" style="align-items:center;text-align:center;gap:4px">
+                  <span class="small">You have</span><span class="big">$44.38</span>
+                  <span class="ticker" style="font-family:var(--f-num);color:var(--sun);font-weight:600">+6.912¢</span><span class="small">made so far today</span>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div class="card" style="gap:4px"><span class="eyebrow">Today</span><span style="font-size:.9rem">3 of 5 tasks · 0.16% today</span><div class="meter"><i style="width:60%"></i></div></div>
+                <div class="card" style="gap:4px"><span class="eyebrow">Linked devices (parent view)</span>
+                  <div class="row" style="font-size:.85rem"><span>Maya's iPad · Maya &amp; Leo</span><span class="small">just now</span></div>
+                  <div class="row" style="font-size:.85rem"><span>Dad's iPhone (this one)</span><span class="small">2 min ago</span></div>
+                  <button class="btn sm" type="button" style="align-self:flex-start">Remove…</button>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          <figcaption><h3>Shared iPad &amp; parent control</h3><p>If Leo links the same iPad, a name switcher appears at the top. On iPad the garden uses two columns. Parents see every device under Devices and can remove one, which signs everyone on it out. iPads have no vibration, so on a kid's iPad the celebration animations carry the reward moment.</p></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="ballot-h">
+    <div class="section-head">
+      <span class="eyebrow">Final feature list · approved Sep 30</span>
+      <h2 id="ballot-h">What v1 includes</h2>
+      <p>Your approved picks plus the two changes from this round (daily compounding with adjustable rate and cadence, and boost week).</p>
+    </div>
+    <div class="ballot" id="ballot"></div>
+  </section>
+
+  <section aria-labelledby="tone-h">
+    <div class="section-head">
+      <span class="eyebrow">Voice · sayings, analogies, stories</span>
+      <h2 id="tone-h">How GrowBucks talks to kids</h2>
+      <p>These are samples for the rotating "money seed" card and payday messages. They're short, a little playful, and always about what the kid's own numbers are doing.</p>
+    </div>
+    <div class="sayings">
+      <div class="say"><span class="k">Saying</span><q>Spend a seed, lose a tree.</q><p>Shown when a spend is logged, next to what that money would have grown into.</p></div>
+      <div class="say"><span class="k">Boost</span><q>Boost week! Your money is growing twice as fast.</q><p>Banner and message when a parent turns on a boost.</p></div>
+      <div class="say"><span class="k">Analogy</span><q>Your money is a snowball.</q><p>Every payday it rolls downhill, picks up snow, and the bigger it gets, the more it picks up.</p></div>
+      <div class="say story"><span class="k">Story · The two gardeners</span><p>Sam and Jo each found a magic seed that grows one new seed every week. Sam ate his right away. Jo planted hers, and every seed it made got planted too. By summer Jo had a whole garden and Sam had a snack. Your GrowBucks work the same way, and interest is the new seeds.</p></div>
+      <div class="say"><span class="k">Payday message</span><q id="payday-msg">Your money made 7¢ today while you were at school.</q><p>Evening message, using the real number.</p></div>
+    </div>
+  </section>
+
+</div>
+
+
+<script>
+(() => {
+  // ---- port of src/lib/growth.ts (daily accrual, cadence posting, boosts) ----
+  const PPM = 1e6;
+  const D = (iso) => new Date(iso + "T00:00:00Z");
+  const addDays = (iso, n) => { const d = D(iso); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const weekday = (iso) => D(iso).getUTCDay();
+  const dim = (iso) => { const d = D(iso); return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)).getUTCDate(); };
+  const daysInPeriod = (iso, c) => (c === "daily" ? 1 : c === "weekly" ? 7 : dim(iso));
+  const isPosting = (iso, c, payday) => c === "daily" || (c === "weekly" ? weekday(iso) === payday : D(iso).getUTCDate() === dim(iso));
+  const AVG = { daily: 1, weekly: 7, monthly: 365.25 / 12 };
+  const convert = (ppm, from, to) => Math.round(((1 + ppm / PPM) ** (AVG[to] / AVG[from]) - 1) * PPM);
+  function project(o) {
+    const { policy = "saveAll", purchases = [], boosts = [] } = o;
+    const spendOn = (d) => purchases.filter((p) => p.day === d).reduce((s, p) => s + p.cents, 0);
+    const boostOn = (d) => (boosts.find((b) => d >= b.fromDay && d <= b.toDay)?.x100 ?? 100) / 100;
+    let bal = o.startCents, acc = 0, tA = 0, tI = 0, tS = 0;
+    const spend = (c) => { const a = Math.min(Math.max(0, c), bal); bal -= a; tS += a; };
+    spend(spendOn(0));
+    const pts = [{ day: 0, date: o.startDate, bal, tA, tI, tS, today: 0, posted: 0 }];
+    for (let day = 1; day <= o.days; day++) {
+      const date = addDays(o.startDate, day);
+      const today = (bal * o.ratePpm * boostOn(day)) / daysInPeriod(date, o.cadence);
+      acc += today;
+      let posted = 0;
+      if (isPosting(date, o.cadence, o.payday)) { posted = Math.floor(acc / PPM); acc -= posted * PPM; bal += posted; }
+      const allow = weekday(date) === o.payday ? o.allowance : 0;
+      bal += allow; tI += posted; tA += allow;
+      if (policy === "spendInterest" || policy === "spendEverything") spend(posted);
+      if (policy === "spendAllowance" || policy === "spendEverything") spend(allow);
+      spend(spendOn(day));
+      pts.push({ day, date, bal, tA, tI, tS, today, posted });
+    }
+    return pts;
+  }
+  const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  const $ = (c) => usd.format(c / 100);
+  const cents = (micro) => { const c = micro / PPM; return c < 100 ? `${c.toFixed(c < 10 ? 1 : 0)}¢` : $(Math.round(c)); };
+  const pct = (ppm) => { const p = (ppm / PPM) * 100; return `${p < 1 ? p.toFixed(3).replace(/0$/, "") : Number(p.toFixed(2))}%`; };
+  const el = (id) => document.getElementById(id);
+
+  // ---- Maya ----
+  const START = "2026-08-19", NOW = 42; // day 42 = Wed Sep 30, 2026
+  const RATE = 1600; // 3 of 5 daily tasks between 0.10% and 0.20%
+  const maya = { startDate: START, startCents: 2000, cadence: "daily", ratePpm: RATE, payday: 6, allowance: 500, boosts: [{ fromDay: 40, toDay: 46, x100: 200 }] };
+  const actual = project({ ...maya, days: NOW + 56, purchases: [{ day: 21, cents: 800 }] });
+  const ideal = project({ ...maya, days: NOW + 56 });
+  const today = actual[NOW];
+  el("k-bal").textContent = $(today.bal);
+  el("p-bal").textContent = $(today.bal);
+  el("p-rate").textContent = `${pct(RATE)}/day`;
+  el("c-rate").textContent = `3 of 5 → ${pct(RATE)}/day`;
+  el("k-72").textContent = `72 ÷ ${(RATE / PPM) * 100}`;
+  el("k-double").textContent = `${Math.round(72 / ((RATE / PPM) * 100) / 30.44)} months`;
+  el("payday-msg").textContent = `Your money made ${cents(actual[NOW - 1].today)} today while you were at school.`;
+
+  // live "made today" ticker: today's accrual × fraction of the day gone by
+  const tick = () => {
+    const n = new Date();
+    const f = (n.getHours() * 3600 + n.getMinutes() * 60 + n.getSeconds()) / 86400;
+    el("k-today").textContent = `+${(today.today / PPM * f).toFixed(3)}¢`;
+  };
+  tick(); setInterval(tick, 1000);
+
+  // rates table
+  el("rate-bal").textContent = $(today.bal);
+  el("rate-rows").innerHTML = [
+    ["Daily", "daily", "every night"],
+    ["Weekly", "weekly", "Saturdays"],
+    ["Monthly", "monthly", "last day of the month"],
+  ].map(([label, c, lands]) => {
+    const lo = convert(1000, "daily", c), hi = convert(2000, "daily", c), r = convert(RATE, "daily", c);
+    const made = (today.bal * r * 2) / daysInPeriod(today.date, c);
+    const per = c === "daily" ? "day" : c === "weekly" ? "week" : "month";
+    return `<tr class="${c === "daily" ? "rec" : ""}"><td>${label}</td><td class="num">${pct(lo)}–${pct(hi)} / ${per}</td><td class="num">${cents(made)}</td><td>${lands}</td><td class="num">${pct(convert(1000, "daily", "monthly"))}–${pct(convert(2000, "daily", "monthly"))} / mo</td></tr>`;
+  }).join("");
+  document.querySelectorAll("tr.rec td:first-child").forEach((td) => td.setAttribute("data-default", ""));
+  el("s-equiv").textContent = `≈ ${pct(convert(1000, "daily", "monthly"))} to ${pct(convert(2000, "daily", "monthly"))} a month`;
+
+  // stage + plant
+  const stages = [["Seed", 0], ["Sprout", 1000], ["Sapling", 3000], ["Tree", 6000], ["Orchard", 15000]];
+  let si = 0; stages.forEach(([, min], i) => { if (today.bal >= min) si = i; });
+  const [sName, sMin] = stages[si], next = stages[si + 1];
+  el("k-stage").textContent = sName;
+  if (next) {
+    el("k-stage-meter").style.width = `${Math.round(((today.bal - sMin) / (next[1] - sMin)) * 100)}%`;
+    el("k-stage-next").textContent = `${$(next[1] - today.bal)} more to grow into a ${next[0]}`;
+  }
+  el("plant").innerHTML = `
+    <ellipse cx="60" cy="96" rx="44" ry="7" fill="var(--sunken)"/>
+    <path d="M26 92 Q60 82 94 92 L90 100 Q60 104 30 100 Z" fill="var(--soil)"/>
+    <rect x="57" y="44" width="6" height="50" rx="3" fill="var(--soil)"/>
+    <path d="M60 64 C44 62 36 52 36 40 C50 40 60 50 60 64 Z" fill="var(--leaf)"/>
+    <path d="M60 56 C76 54 86 44 86 30 C70 30 60 42 60 56 Z" fill="var(--leaf)"/>
+    <circle cx="60" cy="30" r="16" fill="var(--leaf)"/>
+    <circle cx="68" cy="24" r="5" fill="var(--sun)"/>
+    <circle cx="50" cy="34" r="4" fill="var(--sun)"/>`;
+
+  // growth chart (x in weeks)
+  (() => {
+    const W = 280, H = 200, L = 36, Rt = 8, T = 10, B = 26;
+    const xmax = (NOW + 56) / 7;
+    const ymax = Math.ceil(Math.max(...ideal.map((p) => p.bal)) / 2000) * 2000;
+    const x = (day) => L + (day / 7 / xmax) * (W - L - Rt);
+    const y = (c) => T + (1 - c / ymax) * (H - T - B);
+    let s = "";
+    for (let v = 0; v <= ymax; v += ymax / 4) {
+      s += `<line x1="${L}" x2="${W - Rt}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
+      s += `<text x="${L - 6}" y="${y(v) + 4}" font-size="11" text-anchor="end" fill="var(--muted)">$${v / 100}</text>`;
+    }
+    [0, 4, 8, 12].forEach((w) => { s += `<text x="${x(w * 7)}" y="${H - 8}" font-size="11" text-anchor="middle" fill="var(--muted)">wk ${w}</text>`; });
+    const past = actual.slice(0, NOW + 1);
+    const principal = past.map((p) => Math.max(0, p.bal - p.tI));
+    const path = (pts) => pts.map(([d, c], i) => `${i ? "L" : "M"}${x(d).toFixed(1)},${y(c).toFixed(1)}`).join("");
+    const area = (top, bot) => `${path(top)}L${bot.slice().reverse().map(([d, c]) => `${x(d).toFixed(1)},${y(c).toFixed(1)}`).join("L")}Z`;
+    s += `<path d="${area(past.map((p, i) => [i, principal[i]]), past.map((_, i) => [i, 0]))}" fill="var(--leaf)" opacity=".85"/>`;
+    s += `<path d="${area(past.map((p, i) => [i, p.bal]), past.map((_, i) => [i, principal[i]]))}" fill="var(--sun)"/>`;
+    s += `<path d="${path(actual.slice(NOW).map((p) => [p.day, p.bal]))}" fill="none" stroke="var(--leaf)" stroke-width="2.5" stroke-dasharray="1 5" stroke-linecap="round"/>`;
+    s += `<path d="${path(ideal.map((p) => [p.day, p.bal]))}" fill="none" stroke="var(--sky)" stroke-width="2" stroke-dasharray="5 4"/>`;
+    s += `<line x1="${x(NOW)}" x2="${x(NOW)}" y1="${T}" y2="${H - B}" stroke="var(--fg)" stroke-width="1" opacity=".5"/>`;
+    s += `<text x="${x(NOW) - 4}" y="${T + 9}" font-size="11" text-anchor="end" fill="var(--fg)">today</text>`;
+    s += `<circle cx="${x(NOW)}" cy="${y(today.bal)}" r="4" fill="var(--leaf)" stroke="var(--surface)" stroke-width="2"/>`;
+    s += `<circle cx="${x(21)}" cy="${y(actual[21].bal)}" r="3.5" fill="var(--berry)"/>`;
+    s += `<text x="${x(21)}" y="${y(actual[21].bal) - 10}" font-size="11" text-anchor="middle" fill="var(--berry)">−$8</text>`;
+    el("growth-chart").innerHTML = s;
+    el("g-int").textContent = $(today.tI);
+    el("g-cost").textContent = $(ideal[NOW].bal - today.bal);
+    el("g-future").textContent = $(actual.at(-1).bal);
+  })();
+
+  // what-if (from today, rate without boost)
+  const fromToday = { startDate: today.date, startCents: today.bal, cadence: "daily", ratePpm: RATE, payday: 6, allowance: 500 };
+  const policies = [
+    ["Save everything", "saveAll", "var(--leaf)"],
+    ["Spend only the interest", "spendInterest", "var(--sun)"],
+    ["Spend only the allowance", "spendAllowance", "var(--sky)"],
+    ["Spend it all", "spendEverything", "var(--berry)"],
+  ];
+  function renderWhatIf() {
+    const weeks = +el("wi-weeks").value;
+    el("wi-weeks-out").textContent = `${weeks} week${weeks === 1 ? "" : "s"}`;
+    const res = policies.map(([label, policy, color]) => [label, color, project({ ...fromToday, days: weeks * 7, policy }).at(-1).bal]);
+    const max = Math.max(...res.map((r) => r[2]));
+    el("wi-bars").innerHTML = res.map(([label, color, c]) => `<div class="bar"><div class="row"><span>${label}</span><b>${$(c)}</b></div><div class="track"><div class="fill" style="width:${(c / max) * 100}%;background:${color}"></div></div></div>`).join("");
+    const amt = +el("wi-amt").value * 100;
+    el("wi-amt-out").textContent = $(amt).replace(".00", "");
+    const fin = (day) => project({ ...fromToday, days: 60, purchases: [{ day, cents: amt }] }).at(-1).bal;
+    const now = fin(0), later = fin(28);
+    el("wi-callout").innerHTML = `Buy it <b>today</b>: ${$(now)} in 2 months.<br>Wait <b>4 weeks</b>: ${$(later)}.<br>Waiting leaves you <b>${$(later - now)}</b> richer.`;
+  }
+  el("wi-weeks").addEventListener("input", renderWhatIf);
+  el("wi-amt").addEventListener("input", renderWhatIf);
+  renderWhatIf();
+
+  // parent ledger: daily interest grouped by week
+  const sumPosted = (a, b) => actual.slice(a, b + 1).reduce((s, p) => s + p.posted, 0);
+  const rows = [
+    ["Interest, Sun–Tue (2 days boosted)", "int", sumPosted(39, 41), "this week"],
+    ["Allowance", "pos", 500, "Sat"],
+    ["Interest, 7 days", "int", sumPosted(32, 38), "last week"],
+    ["Stickers", "neg", -800, "3 wks ago"],
+  ];
+  el("p-ledger").innerHTML = rows.map(([t, cls, c, when]) => `<div class="tx"><div style="display:flex;flex-direction:column;min-width:0"><span>${t}</span><span class="small">${when}</span></div><span class="amt ${cls}">${c > 0 ? "+" : "−"}${$(Math.abs(c))}</span></div>`).join("");
+
+  // final feature list
+  const groups = [
+    ["mvp", "In v1", [
+      ["Kid garden home", "Balance, a live \"made today\" counter, a plant that levels up, a daily saying, the doubling trick.", ["Kid"]],
+      ["Growth chart", "What you put in vs what interest added, the \"if you kept it all\" line, and what past spending cost.", ["Kid", "Parent"]],
+      ["What-if lab", "Save all / spend interest / spend allowance / spend all, plus the now-or-later purchase comparison.", ["Kid"]],
+      ["Rates & compounding", "Parents choose daily, weekly or monthly compounding and a rate floor and ceiling. Default: daily, 0.10%–0.20%.", ["Parent"]],
+      ["Boost week", "A parent taps Boost (with an optional reason) and the kid's rate is multiplied for 7 days. 2× by default, adjustable, one at a time.", ["Parent", "Kid"]],
+      ["Automatic interest & allowance", "A nightly job adds interest and allowance on schedule in each family's timezone, and catches up on any missed days.", ["System"]],
+      ["Parent ledger", "Log gifts, bonuses and spending per kid. Every entry is kept; interest rows are system-made and grouped by week.", ["Parent"]],
+      ["Rules per kid", "Allowance, payday, PIN, boost strength, and whether the kid can propose rate changes.", ["Parent"]],
+      ["Task rewards & celebrations", "Each task shows its reward up front: a rate bump for today (daily tasks) or cash. Sets and Perfect Day pay bonuses. Checking off plays a celebration sized to the reward. Parents choose trust or check for each task.", ["Kid", "Parent"]],
+      ["Family sign-in & kid devices", "Parents sign in with an emailed code. A kid's iPad links by scanning a one-time code from a parent's phone and stays signed in as that kid. Parents can see and remove devices, and siblings can share an iPad.", ["Parent", "Kid"]],
+      ["Kid proposals", "Kids pitch new tasks, prices or rate changes. Parents accept, decline or counter.", ["Kid", "Parent"]],
+      ["Money seeds", "Rotating sayings, analogies and short stories tied to the kid's own numbers.", ["Kid"]],
+    ]],
+    ["next", "Later", [
+      ["Savings goals", "\"Saving for a Lego set, $40.\" Shows the day the interest alone could pay for it.", ["Kid"]],
+      ["Payday recap", "A short weekly card: what grew, what was spent, tasks done, best day.", ["Kid", "Parent"]],
+      ["Milestone badges", "First dollar of interest, money doubled, four weeks without spending.", ["Kid"]],
+      ["Spend check-in", "Before a spend is saved, show what it would have grown into in 3 months.", ["Parent", "Kid"]],
+      ["Home-screen widget", "Balance and today's earnings on the home screen, and a lock-screen countdown during boost week.", ["Kid"]],
+    ]],
+    ["maybe", "Not planned", [
+      ["Sibling view", "Kids seeing each other's gardens. Could motivate or cause friction.", ["Kid"]],
+    ]],
+  ];
+  el("ballot").innerHTML = groups.map(([tier, title, items]) => `
+    <div class="group-h tier ${tier}">${title} · ${items.length}</div>
+    ${items.map(([name, desc, who]) => `
+      <div class="feat">
+        <span class="tier ${tier}">${tier === "mvp" ? "v1" : tier === "next" ? "Later" : "No"}</span>
+        <div class="body"><h3>${name}</h3><p>${desc}</p><span class="who-tag">${who.map((w) => `<span class="pill p-muted">${w}</span>`).join("")}</span></div>
+      </div>`).join("")}`).join("");
+})();
+</script>
+
+<script>
+(() => {
+  // ---- port of src/lib/rewards.ts ----
+  const PPM = 1e6;
+  const ALLOWANCE = 500, BAL = 4438, BOOST = 2, FLOOR = 1000, CEIL = 2000;
+  const tasks = [
+    { id: "bed", em: "🛏", title: "Make bed", schedule: "daily", reward: { kind: "rate", ppm: 200 }, set: "am" },
+    { id: "teeth", em: "🪥", title: "Brush teeth", schedule: "daily", reward: { kind: "rate", ppm: 200 }, set: "am" },
+    { id: "dog", em: "🐶", title: "Feed Biscuit", schedule: "daily", reward: { kind: "rate", ppm: 200 } },
+    { id: "dishes", em: "🍽", title: "Clear dishes", schedule: "daily", reward: { kind: "rate", ppm: 200 } },
+    { id: "hw", em: "📚", title: "Homework before screens", schedule: "daily", reward: { kind: "rate", ppm: 200 } },
+    { id: "leaves", em: "🍂", title: "Rake the leaves", schedule: "once", reward: { kind: "cash", cents: 200 }, parent: true },
+    { id: "book", em: "📖", title: "Finish a chapter book", schedule: "once", reward: { kind: "cash", cents: 500 } },
+  ];
+  const sets = [
+    { id: "am", title: "Morning routine", scope: "custom", bonus: { kind: "cash", cents: 25 } },
+    { id: "all", title: "Perfect day!", scope: "allDaily", bonus: { kind: "cash", cents: 50 } },
+  ];
+  const daily = tasks.filter((t) => t.schedule === "daily");
+  const members = (s) => (s.scope === "allDaily" ? daily : tasks.filter((t) => t.set === s.id));
+  const complete = (s, done) => members(s).every((t) => done.has(t.id));
+  const value = (r) => (r.kind === "cash" ? r.cents * PPM : r.kind === "rate" ? BAL * r.ppm * BOOST : 0);
+  const tierOf = (v, min = 1) => { const x = v / PPM / ALLOWANCE; return Math.max(min, x < 0.05 ? 1 : x < 0.25 ? 2 : x < 1 ? 3 : 4); };
+  function checkOff(id, doneIds, pending) {
+    const task = tasks.find((t) => t.id === id);
+    const after = new Set(doneIds).add(id);
+    const events = [{ label: task.title, reward: task.reward, v: value(task.reward) }];
+    let min = 1;
+    for (const s of sets) if (!complete(s, doneIds) && complete(s, after)) { events.push({ label: s.title, reward: s.bonus, v: value(s.bonus), set: s }); min = Math.max(min, s.scope === "allDaily" ? 3 : 2); }
+    let tier = tierOf(events.reduce((a, e) => a + e.v, 0), min);
+    if (pending) tier = Math.min(tier, 2);
+    return { events, tier, pending };
+  }
+
+  // ---- formatting ----
+  const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  const fmtCash = (c) => (c < 100 ? `${c}¢` : usd.format(c / 100));
+  const fmtMicro = (m) => { const c = m / PPM; return c < 100 ? `${c.toFixed(1)}¢` : usd.format(c / 100); };
+  const pct = (ppm) => `${(ppm / 1e4).toFixed(3).replace(/0$/, "")}%`;
+  const rewardMain = (r) => (r.kind === "cash" ? `+${fmtCash(r.cents)}` : `+${fmtMicro(value(r))} today`);
+  const el = (id) => document.getElementById(id);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- state + render ----
+  let done = new Set(), pendingIds = new Set();
+  const earnedPpm = () => [...done].reduce((s, id) => { const t = tasks.find((x) => x.id === id); return s + (t.reward.kind === "rate" ? t.reward.ppm : 0); }, 0);
+  const dayRate = () => Math.min(CEIL, FLOOR + earnedPpm());
+  function render() {
+    const group = (label, list, extra = "") => `<div class="task-group"><div class="group-label"><span>${label}</span>${extra}</div>${list.map(row).join("")}</div>`;
+    const row = (t) => {
+      const on = done.has(t.id), pend = pendingIds.has(t.id);
+      const chip = t.reward.kind === "rate" ? `<span class="chip rate">${rewardMain(t.reward)}<small>+${pct(t.reward.ppm)} rate</small></span>` : `<span class="chip cash">+${fmtCash(t.reward.cents)}${pend ? "<small>when Dad checks</small>" : t.parent ? "<small>Dad checks</small>" : ""}</span>`;
+      return `<button type="button" class="task${pend ? " pend" : ""}" data-id="${t.id}" aria-pressed="${on || pend}"><span class="cb"></span><span class="em">${t.em}</span><span class="t">${t.title}</span>${chip}</button>`;
+    };
+    const am = members(sets[0]);
+    const dots = `<span class="dots">${am.map((t) => `<i class="${done.has(t.id) ? "on" : ""}"></i>`).join("")}</span>`;
+    el("task-list").innerHTML =
+      group(`Morning routine · both for +${fmtCash(sets[0].bonus.cents)}`, am, dots) +
+      group(`Daily · all ${daily.length} = Perfect day +${fmtCash(sets[1].bonus.cents)}`, daily.filter((t) => !t.set)) +
+      group("Extra", tasks.filter((t) => t.schedule !== "daily"));
+    const n = daily.filter((t) => done.has(t.id)).length;
+    el("ring-fg").style.strokeDashoffset = String(169.6 * (1 - n / daily.length));
+    el("ring-txt").textContent = `${n}/${daily.length}`;
+    el("rate-now").textContent = pct(dayRate());
+    el("play-approve").disabled = !pendingIds.has("leaves");
+  }
+  const tick = () => { const d = new Date(); const f = (d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds()) / 86400; el("play-ticker").textContent = `${((BAL * dayRate() * BOOST) / PPM * f).toFixed(3)}¢`; };
+  setInterval(tick, 1000);
+
+  // ---- particles ----
+  const screen = el("play"), canvas = el("fx"), ctx = canvas.getContext("2d");
+  let parts = [], raf = 0;
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function burst(x, y, n, kind = "coin", spread = 1) {
+    if (reduce) return;
+    const r = screen.getBoundingClientRect();
+    canvas.width = r.width * devicePixelRatio; canvas.height = r.height * devicePixelRatio;
+    const sun = css("--sun"), leaf = css("--leaf");
+    for (let i = 0; i < n; i++) {
+      const a = kind === "rain" ? Math.PI / 2 : -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * spread;
+      const sp = kind === "rain" ? 1 + Math.random() * 2 : 3 + Math.random() * 4;
+      parts.push({ x: kind === "rain" ? Math.random() * r.width : x, y: kind === "rain" ? -20 - Math.random() * r.height * 0.6 : y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.3, life: 0, max: kind === "rain" ? 160 : 70 + Math.random() * 30, leaf: Math.random() < (kind === "coin" ? 0.15 : 0.45), c: { sun, leaf }, s: 4 + Math.random() * 4 });
+    }
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
+  function frame() {
+    const dpr = devicePixelRatio;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    parts = parts.filter((p) => p.life < p.max);
+    for (const p of parts) {
+      p.life++; p.vy += 0.15; p.x += p.vx; p.y += p.vy; p.vx *= 0.99; p.rot += p.vr;
+      ctx.globalAlpha = Math.min(1, (p.max - p.life) / 20);
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      if (p.leaf) { ctx.fillStyle = p.c.leaf; ctx.beginPath(); ctx.ellipse(0, 0, p.s * 1.4, p.s * 0.6, 0, 0, Math.PI * 2); ctx.fill(); }
+      else { ctx.fillStyle = p.c.sun; ctx.beginPath(); ctx.ellipse(0, 0, p.s, p.s * Math.abs(Math.cos(p.rot * 2)) + 1, 0, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+    raf = parts.length ? requestAnimationFrame(frame) : 0;
+  }
+
+  // ---- celebrations ----
+  function floatChip(btn, text, cls = "", big = false) {
+    const sr = screen.getBoundingClientRect(), br = btn ? btn.getBoundingClientRect() : { left: sr.left + sr.width / 2 - 10, width: 20, top: sr.top + sr.height / 2 };
+    const f = document.createElement("span");
+    f.className = `float ${cls}${big ? " big" : ""}`; f.textContent = text;
+    f.style.left = `${sr.width / 2}px`; f.style.top = `${br.top - sr.top - 6}px`;
+    screen.appendChild(f); setTimeout(() => f.remove(), 1600);
+  }
+  function countUp(node, micro) {
+    const end = micro / PPM, t0 = performance.now(), dur = reduce ? 0 : 900;
+    const step = (t) => { const k = dur ? Math.min(1, (t - t0) / dur) : 1; const e = 1 - (1 - k) ** 3; const c = end * e; node.textContent = c < 100 ? `+${c.toFixed(end < 10 ? 1 : 0)}¢` : `+${usd.format(c / 100)}`; if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  const plantSvg = `<svg class="grow" width="84" height="74" viewBox="0 0 120 104" aria-hidden="true"><path d="M26 92 Q60 82 94 92 L90 100 Q60 104 30 100 Z" fill="var(--soil)"/><rect x="57" y="40" width="6" height="54" rx="3" fill="var(--soil)"/><path d="M60 64 C44 62 36 52 36 40 C50 40 60 50 60 64 Z" fill="var(--leaf)"/><path d="M60 56 C76 54 86 44 86 30 C70 30 60 42 60 56 Z" fill="var(--leaf)"/><circle cx="60" cy="26" r="18" fill="var(--leaf)"/><circle cx="69" cy="20" r="5" fill="var(--sun)"/><circle cx="49" cy="30" r="4" fill="var(--sun)"/><circle cx="62" cy="36" r="4" fill="var(--sun)"/></svg>`;
+  let closeTimer = 0;
+  function overlay(result, jackpot) {
+    const cel = el("cel");
+    const total = result.events.reduce((a, e) => a + e.v, 0);
+    const headline = result.events.find((e) => e.set?.scope === "allDaily") ? "Perfect day!" : result.events.find((e) => e.set) ? `${result.events.find((e) => e.set).set.title} done!` : jackpot ? "Huge!" : "Nice work!";
+    const rateEv = result.events.filter((e) => e.reward.kind === "rate");
+    cel.className = `celebrate${jackpot ? " jackpot" : ""}`;
+    cel.innerHTML = `${jackpot ? '<div class="rays"></div>' : ""}<div class="cel-card">${plantSvg}<h4>${headline}</h4><span class="amt" id="cel-amt">+0¢</span>
+      <ul>${result.events.map((e) => `<li><span>${e.label}</span><b>${rewardMain(e.reward)}</b></li>`).join("")}</ul>
+      ${rateEv.length ? `<span class="small">Today's rate is now <b class="num">${pct(dayRate())}</b></span>` : ""}
+      <span class="tap">${jackpot ? "Tap to keep it growing" : "Tap to close"}</span></div>`;
+    cel.hidden = false;
+    countUp(el("cel-amt"), total);
+    clearTimeout(closeTimer);
+    if (!jackpot) closeTimer = setTimeout(() => (cel.hidden = true), 3200);
+    if (jackpot) { burst(0, 0, 90, "rain"); setTimeout(() => burst(screen.clientWidth / 2, screen.clientHeight * 0.45, 60, "leafy", 2), 250); }
+    else burst(0, 0, 45, "rain");
+  }
+  el("cel").addEventListener("click", () => (el("cel").hidden = true));
+
+  function celebrate(result, btn) {
+    const cb = btn?.querySelector(".cb");
+    const r = screen.getBoundingClientRect(), b = cb ? cb.getBoundingClientRect() : r;
+    const x = b.left - r.left + b.width / 2, y = b.top - r.top + b.height / 2;
+    const first = result.events[0];
+    const cls = first.reward.kind === "cash" ? "cash" : "";
+    if (result.pending) {
+      floatChip(btn, `Seed planted! ${fmtCash(first.reward.cents)} when Dad checks`, "cash");
+      burst(x, y, 6, "leafy", 0.6);
+      return;
+    }
+    if (result.tier === 1) { floatChip(btn, rewardMain(first.reward), cls); burst(x, y, 4, "leafy", 0.5); }
+    else if (result.tier === 2) {
+      const label = result.events.length > 1 ? `${result.events[1].label} +${fmtCash(result.events[1].reward.cents ?? 0)}` : rewardMain(first.reward);
+      floatChip(btn, label, "cash", true); burst(x, y, 16, "coin", 1.2);
+      el("rate-now").classList.add("bump"); setTimeout(() => el("rate-now").classList.remove("bump"), 300);
+    } else overlay(result, result.tier === 4);
+  }
+
+  el("task-list").addEventListener("click", (e) => {
+    const btn = e.target.closest(".task"); if (!btn) return;
+    const id = btn.dataset.id, t = tasks.find((x) => x.id === id);
+    if (done.has(id) || pendingIds.has(id)) { done.delete(id); pendingIds.delete(id); render(); return; }
+    const result = checkOff(id, done, !!t.parent);
+    if (t.parent) pendingIds.add(id); else done.add(id);
+    render();
+    const fresh = el("task-list").querySelector(`[data-id="${id}"]`);
+    fresh.classList.add("pop");
+    celebrate(result, fresh);
+  });
+  el("play-approve").addEventListener("click", () => {
+    pendingIds.delete("leaves");
+    const result = checkOff("leaves", done, false);
+    done.add("leaves"); render();
+    celebrate(result, el("task-list").querySelector('[data-id="leaves"]'));
+  });
+  el("play-reset").addEventListener("click", () => { done = new Set(); pendingIds = new Set(); el("cel").hidden = true; render(); });
+  document.querySelectorAll("[data-tier]").forEach((b) => b.addEventListener("click", () => {
+    const t = +b.dataset.tier;
+    const sample = {
+      1: ["dog", new Set()],
+      2: ["teeth", new Set(["bed"])],
+      3: ["hw", new Set(["bed", "teeth", "dog", "dishes"])],
+      4: ["book", new Set()],
+    }[t];
+    done = new Set(sample[1]); pendingIds = new Set();
+    const result = checkOff(sample[0], done, false);
+    done.add(sample[0]); render();
+    el("play").scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+    setTimeout(() => celebrate(result, el("task-list").querySelector(`[data-id="${sample[0]}"]`)), reduce ? 0 : 350);
+  }));
+
+  render(); tick();
+})();
+</script>
+
+<script>
+(() => {
+  // Decorative QR-like pattern for the sketch (the app renders a real QR).
+  const cv = document.getElementById("qr-sketch"); if (!cv) return;
+  const g = cv.getContext("2d"), n = 29; let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  g.fillStyle = "#fff"; g.fillRect(0, 0, n, n); g.fillStyle = "#132419";
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (rnd() < 0.48) g.fillRect(x, y, 1, 1);
+  const finder = (x, y) => { g.fillStyle = "#fff"; g.fillRect(x - 1, y - 1, 9, 9); g.fillStyle = "#132419"; g.fillRect(x, y, 7, 7); g.fillStyle = "#fff"; g.fillRect(x + 1, y + 1, 5, 5); g.fillStyle = "#132419"; g.fillRect(x + 2, y + 2, 3, 3); };
+  finder(0, 0); finder(n - 7, 0); finder(0, n - 7);
+})();
+</script>

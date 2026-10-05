@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "GrowBucks",
+    "slug": "growbucks",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "growbucks",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "cash.growbucks.app",
+      "supportsTablet": true,
+      "config": { "usesNonExemptEncryption": false }
+    },
+    "android": {
+      "package": "cash.growbucks.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#1D7D3E",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "GrowBucks uses the camera to scan the code on a parent's phone and link this device.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F3F9F2",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 120,
+          "dark": { "backgroundColor": "#0A140E" }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
