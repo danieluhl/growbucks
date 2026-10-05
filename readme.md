@@ -79,7 +79,7 @@ pnpm test                                 # interest/reward/pairing unit tests
 Two terminals:
 
 ```sh
-pnpm dev:api    # Worker + local D1 on http://localhost:3000 (also on your LAN)
+pnpm dev:api    # applies local migrations, then Worker + D1 on :3000 (and LAN)
 pnpm dev:app    # Expo dev server
 ```
 

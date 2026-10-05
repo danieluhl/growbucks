@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "pnpm --silent db:migrate:local && vite dev",
     "build": "vite build && tsc --noEmit",
     "preview": "vite preview",
     "deploy": "pnpm build && pnpm db:migrate:remote && wrangler deploy",
