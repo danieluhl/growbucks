@@ -56,7 +56,8 @@ export function Title({ children }: { children: ReactNode }) {
       style={{
         fontFamily: fonts.display,
         fontSize: 34,
-        lineHeight: 38,
+        // No fixed lineHeight: Baloo 2's tall ascenders get clipped on iOS
+        // when the line is shorter than the font's own metrics.
         color: c.leaf,
       }}
     >
