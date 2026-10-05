@@ -92,8 +92,10 @@ pnpm --filter @growbucks/mobile ios:device   # plugged-in iPhone/iPad
 ```
 
 In development the app talks to the computer running `expo start` on port
-3000. Parent sign-in codes are printed in the `dev:api` terminal unless
-`RESEND_API_KEY` is set in `apps/web/.dev.vars`.
+3000. Parents sign in with Apple. The app has the Sign in with Apple
+capability, so Xcode needs a paid Apple developer team to sign it (select it
+under Signing & Capabilities the first time). In the simulator, sign in to an
+Apple ID under Settings first; the API needs to reach appleid.apple.com.
 
 ## Everyday commands
 
@@ -111,7 +113,6 @@ In development the app talks to the computer running `expo start` on port
 ```sh
 pnpm --filter @growbucks/web exec wrangler login
 pnpm --filter @growbucks/web db:create     # copy database_id into wrangler.jsonc
-pnpm --filter @growbucks/web exec wrangler secret put RESEND_API_KEY
 pnpm --filter @growbucks/web run deploy    # build → remote migrations → deploy
 ```
 

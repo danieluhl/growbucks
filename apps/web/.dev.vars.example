@@ -1,3 +1,1 @@
-# Copy to .dev.vars for local secrets. Leave RESEND_API_KEY empty to print
-# sign-in codes in the dev server console instead of emailing them.
-RESEND_API_KEY=
+# Copy to .dev.vars for local secrets. None are needed right now.

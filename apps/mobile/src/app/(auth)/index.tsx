@@ -1,5 +1,6 @@
 import { router } from "expo-router"
 import { Text, View } from "react-native"
+import { AppleSignIn } from "@/components/apple-sign-in"
 import { Body, Button, Card, Screen, Title } from "@/components/ui"
 import { isTablet } from "@/lib/device"
 import { fonts, space, useColors } from "@/theme"
@@ -34,12 +35,7 @@ export default function Welcome() {
         I'm a parent
       </Text>
       <Body>Set up your family, add your kids and set the rules.</Body>
-      <Button
-        label="Sign in with email"
-        variant="secondary"
-        onPress={() => router.push("/parent-email")}
-        testID="welcome-parent"
-      />
+      <AppleSignIn />
     </Card>
   )
   return (

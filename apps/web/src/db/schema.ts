@@ -50,8 +50,10 @@ export const members = sqliteTable(
     }),
     role: text("role", { enum: ["parent", "kid"] }).notNull(),
     name: text("name").notNull(),
-    /** Parents sign in with an emailed code. Kids have no email. */
-    email: text("email").unique(),
+    /** Parents sign in with Apple: the stable `sub` from Apple's token. */
+    appleSub: text("apple_sub").unique(),
+    /** From Apple when the parent shares it (may be a private relay address). */
+    email: text("email"),
     /** Emoji or avatar key picked by the kid. */
     avatar: text("avatar"),
     /**
@@ -106,21 +108,6 @@ export const sessions = sqliteTable(
     index("sessions_member_idx").on(t.memberId),
     index("sessions_device_idx").on(t.deviceId),
   ]
-)
-
-/** Emailed 6-digit sign-in codes for parents (hashed, short-lived). */
-export const loginCodes = sqliteTable(
-  "login_codes",
-  {
-    id: id(),
-    email: text("email").notNull(),
-    codeHash: text("code_hash").notNull(),
-    attempts: integer("attempts").notNull().default(0),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-    usedAt: integer("used_at", { mode: "timestamp_ms" }),
-    createdAt: createdAt(),
-  },
-  (t) => [index("login_codes_email_idx").on(t.email, t.createdAt)]
 )
 
 /** One-time codes a parent shows to link a kid's device (10 minutes). */

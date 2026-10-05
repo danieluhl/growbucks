@@ -50,8 +50,9 @@ sketches: `docs/design/feature-sketches.html`.
 
 ## Accounts & devices
 
-- Parents sign in with an emailed 6-digit code (Resend if
-  `RESEND_API_KEY` is set, otherwise printed in the dev server console).
+- Parents sign in with Apple only (`expo-apple-authentication`). The server
+  checks the identity token against Apple's keys (`@growbucks/core/apple`,
+  audience `APPLE_BUNDLE_ID`) and keys the parent on `members.apple_sub`.
 - A kid's device links by redeeming a one-time pairing code shown on a
   parent's phone (QR of `growbucks://pair/<code>`); it gets a kid-only
   session. Siblings can share a device (one kid session each, switcher on the

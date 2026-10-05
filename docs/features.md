@@ -12,7 +12,7 @@ Interest engine: `src/lib/growth.ts`. Task rewards and celebration sizing:
 
 ## Sign-in and kid devices
 
-- **Parents** sign in with an emailed 6-digit code (no password). A new
+- **Parents** sign in with Apple (no password, no email code). A new
   parent creates the family, then adds kids.
 - **Linking a kid's iPad**: on the parent's phone, "Link Maya's iPad" shows a
   QR code and an 8-character code (no 0/O/1/I/L), valid once for 10

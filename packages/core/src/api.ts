@@ -43,13 +43,11 @@ export const authResponseSchema = z.object({
 
 // ------------------------------------------------------------ parent auth
 
-export const startEmailSignInSchema = z.object({
-  email: z.email().max(254),
-})
-
-export const verifyEmailSignInSchema = z.object({
-  email: z.email().max(254),
-  code: z.string().regex(/^\d{6}$/),
+/** What the app gets back from Sign in with Apple, passed on to the server. */
+export const appleSignInSchema = z.object({
+  identityToken: z.string().min(1).max(4096),
+  /** Apple only shares the name the first time someone signs in. */
+  givenName: z.string().trim().max(60).nullish(),
   device: deviceInfoSchema,
 })
 
@@ -126,16 +124,10 @@ export type ApiError = z.infer<typeof apiErrorSchema>
  * Endpoint table used by the app's client. `path` builders keep params typed.
  */
 export const endpoints = {
-  startEmailSignIn: {
+  appleSignIn: {
     method: "POST",
-    path: () => `${API_PREFIX}/auth/email/start`,
-    body: startEmailSignInSchema,
-    response: z.object({ ok: z.literal(true) }),
-  },
-  verifyEmailSignIn: {
-    method: "POST",
-    path: () => `${API_PREFIX}/auth/email/verify`,
-    body: verifyEmailSignInSchema,
+    path: () => `${API_PREFIX}/auth/apple`,
+    body: appleSignInSchema,
     response: authResponseSchema,
   },
   signOut: {
