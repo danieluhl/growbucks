@@ -65,6 +65,8 @@ export default function AddKid() {
       <Title>Add a kid</Title>
       <Field
         label="Name"
+        autoCorrect={false}
+        spellCheck={false}
         value={name}
         onChangeText={setName}
         placeholder="Maya"
