@@ -9,7 +9,8 @@
     "./rewards": "./src/rewards.ts",
     "./validators": "./src/validators.ts",
     "./api": "./src/api.ts",
-    "./pairing": "./src/pairing.ts"
+    "./pairing": "./src/pairing.ts",
+    "./apple": "./src/apple.ts"
   },
   "scripts": {
     "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",

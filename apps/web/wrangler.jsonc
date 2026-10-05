@@ -15,7 +15,7 @@
       "migrations_dir": "drizzle/migrations"
     }
   ],
-  // Throttles sign-in and device-linking attempts per email / IP.
+  // Throttles sign-in and device-linking attempts per IP.
   "ratelimits": [
     {
       "name": "AUTH_LIMITER",
@@ -24,9 +24,8 @@
     }
   ],
   "vars": {
-    // Where login-code emails come from. RESEND_API_KEY is a secret:
-    // `wrangler secret put RESEND_API_KEY` (or .dev.vars locally). Without
-    // it, codes are printed to the dev server console instead of emailed.
-    "EMAIL_FROM": "GrowBucks <hello@growbucks.cash>"
+    // Sign in with Apple tokens must be issued for this app (the iOS bundle
+    // id in apps/mobile/app.json).
+    "APPLE_BUNDLE_ID": "cash.growbucks.app"
   }
 }

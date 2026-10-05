@@ -1,7 +1,6 @@
 /**
  * Codes and tokens for signing in and linking a kid's device.
  *
- * - Parent sign-in: a 6-digit code emailed to the parent.
  * - Kid device linking: the parent's phone shows an 8-character pairing code
  *   (and a QR code of `growbucks://pair/<code>`). The kid's iPad scans or
  *   types it and receives its own kid-only session token.
@@ -16,10 +15,6 @@
 export const PAIR_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ"
 export const PAIR_CODE_LENGTH = 8
 export const PAIR_CODE_TTL_MINUTES = 10
-
-export const LOGIN_CODE_LENGTH = 6
-export const LOGIN_CODE_TTL_MINUTES = 10
-export const LOGIN_CODE_MAX_ATTEMPTS = 5
 
 export const PAIR_URL_PREFIX = "growbucks://pair/"
 
@@ -37,7 +32,6 @@ export function randomString(alphabet: string, length: number) {
 }
 
 export const newPairCode = () => randomString(PAIR_ALPHABET, PAIR_CODE_LENGTH)
-export const newLoginCode = () => randomString("0123456789", LOGIN_CODE_LENGTH)
 
 export function newSessionToken() {
   const bytes = crypto.getRandomValues(new Uint8Array(32))
@@ -76,5 +70,3 @@ export function parsePairInput(input: string) {
 }
 
 export const pairUrl = (code: string) => `${PAIR_URL_PREFIX}${code}`
-
-export const normalizeEmail = (email: string) => email.trim().toLowerCase()

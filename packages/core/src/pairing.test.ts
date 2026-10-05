@@ -2,7 +2,6 @@ import assert from "node:assert/strict"
 import { describe, test } from "node:test"
 import {
   formatPairCode,
-  newLoginCode,
   newPairCode,
   newSessionToken,
   PAIR_ALPHABET,
@@ -34,11 +33,7 @@ describe("pairing codes", () => {
   })
 })
 
-describe("login codes and tokens", () => {
-  test("login codes are 6 digits", () => {
-    assert.match(newLoginCode(), /^\d{6}$/)
-  })
-
+describe("tokens", () => {
   test("session tokens are 43-char base64url and unique", () => {
     const a = newSessionToken()
     assert.match(a, /^[A-Za-z0-9_-]{43}$/)

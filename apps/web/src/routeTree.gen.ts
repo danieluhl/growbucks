@@ -16,11 +16,10 @@ import { Route as ApiV1FamiliesRouteImport } from './routes/api/v1/families'
 import { Route as ApiV1KidsRouteImport } from './routes/api/v1/kids'
 import { Route as ApiV1MeRouteImport } from './routes/api/v1/me'
 import { Route as ApiV1PairRouteImport } from './routes/api/v1/pair'
+import { Route as ApiV1AuthAppleRouteImport } from './routes/api/v1/auth/apple'
 import { Route as ApiV1AuthSignOutRouteImport } from './routes/api/v1/auth/sign-out'
 import { Route as ApiV1DevicesDeviceIdRouteImport } from './routes/api/v1/devices.$deviceId'
 import { Route as ApiV1DevicesPushTokenRouteImport } from './routes/api/v1/devices.push-token'
-import { Route as ApiV1AuthEmailStartRouteImport } from './routes/api/v1/auth/email/start'
-import { Route as ApiV1AuthEmailVerifyRouteImport } from './routes/api/v1/auth/email/verify'
 import { Route as ApiV1KidsKidIdPairingCodeRouteImport } from './routes/api/v1/kids.$kidId.pairing-code'
 
 const IndexRoute = IndexRouteImport.update({
@@ -58,6 +57,11 @@ const ApiV1PairRoute = ApiV1PairRouteImport.update({
   path: '/api/v1/pair',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiV1AuthAppleRoute = ApiV1AuthAppleRouteImport.update({
+  id: '/api/v1/auth/apple',
+  path: '/api/v1/auth/apple',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiV1AuthSignOutRoute = ApiV1AuthSignOutRouteImport.update({
   id: '/api/v1/auth/sign-out',
   path: '/api/v1/auth/sign-out',
@@ -72,16 +76,6 @@ const ApiV1DevicesPushTokenRoute = ApiV1DevicesPushTokenRouteImport.update({
   id: '/push-token',
   path: '/push-token',
   getParentRoute: () => ApiV1DevicesRoute,
-} as any)
-const ApiV1AuthEmailStartRoute = ApiV1AuthEmailStartRouteImport.update({
-  id: '/api/v1/auth/email/start',
-  path: '/api/v1/auth/email/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1AuthEmailVerifyRoute = ApiV1AuthEmailVerifyRouteImport.update({
-  id: '/api/v1/auth/email/verify',
-  path: '/api/v1/auth/email/verify',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiV1KidsKidIdPairingCodeRoute =
   ApiV1KidsKidIdPairingCodeRouteImport.update({
@@ -98,11 +92,10 @@ export interface FileRoutesByFullPath {
   '/api/v1/kids': typeof ApiV1KidsRouteWithChildren
   '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/pair': typeof ApiV1PairRoute
+  '/api/v1/auth/apple': typeof ApiV1AuthAppleRoute
   '/api/v1/auth/sign-out': typeof ApiV1AuthSignOutRoute
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
-  '/api/v1/auth/email/start': typeof ApiV1AuthEmailStartRoute
-  '/api/v1/auth/email/verify': typeof ApiV1AuthEmailVerifyRoute
   '/api/v1/kids/$kidId/pairing-code': typeof ApiV1KidsKidIdPairingCodeRoute
 }
 export interface FileRoutesByTo {
@@ -113,11 +106,10 @@ export interface FileRoutesByTo {
   '/api/v1/kids': typeof ApiV1KidsRouteWithChildren
   '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/pair': typeof ApiV1PairRoute
+  '/api/v1/auth/apple': typeof ApiV1AuthAppleRoute
   '/api/v1/auth/sign-out': typeof ApiV1AuthSignOutRoute
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
-  '/api/v1/auth/email/start': typeof ApiV1AuthEmailStartRoute
-  '/api/v1/auth/email/verify': typeof ApiV1AuthEmailVerifyRoute
   '/api/v1/kids/$kidId/pairing-code': typeof ApiV1KidsKidIdPairingCodeRoute
 }
 export interface FileRoutesById {
@@ -129,11 +121,10 @@ export interface FileRoutesById {
   '/api/v1/kids': typeof ApiV1KidsRouteWithChildren
   '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/pair': typeof ApiV1PairRoute
+  '/api/v1/auth/apple': typeof ApiV1AuthAppleRoute
   '/api/v1/auth/sign-out': typeof ApiV1AuthSignOutRoute
   '/api/v1/devices/$deviceId': typeof ApiV1DevicesDeviceIdRoute
   '/api/v1/devices/push-token': typeof ApiV1DevicesPushTokenRoute
-  '/api/v1/auth/email/start': typeof ApiV1AuthEmailStartRoute
-  '/api/v1/auth/email/verify': typeof ApiV1AuthEmailVerifyRoute
   '/api/v1/kids/$kidId/pairing-code': typeof ApiV1KidsKidIdPairingCodeRoute
 }
 export interface FileRouteTypes {
@@ -146,11 +137,10 @@ export interface FileRouteTypes {
     | '/api/v1/kids'
     | '/api/v1/me'
     | '/api/v1/pair'
+    | '/api/v1/auth/apple'
     | '/api/v1/auth/sign-out'
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
-    | '/api/v1/auth/email/start'
-    | '/api/v1/auth/email/verify'
     | '/api/v1/kids/$kidId/pairing-code'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -161,11 +151,10 @@ export interface FileRouteTypes {
     | '/api/v1/kids'
     | '/api/v1/me'
     | '/api/v1/pair'
+    | '/api/v1/auth/apple'
     | '/api/v1/auth/sign-out'
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
-    | '/api/v1/auth/email/start'
-    | '/api/v1/auth/email/verify'
     | '/api/v1/kids/$kidId/pairing-code'
   id:
     | '__root__'
@@ -176,11 +165,10 @@ export interface FileRouteTypes {
     | '/api/v1/kids'
     | '/api/v1/me'
     | '/api/v1/pair'
+    | '/api/v1/auth/apple'
     | '/api/v1/auth/sign-out'
     | '/api/v1/devices/$deviceId'
     | '/api/v1/devices/push-token'
-    | '/api/v1/auth/email/start'
-    | '/api/v1/auth/email/verify'
     | '/api/v1/kids/$kidId/pairing-code'
   fileRoutesById: FileRoutesById
 }
@@ -192,9 +180,8 @@ export interface RootRouteChildren {
   ApiV1KidsRoute: typeof ApiV1KidsRouteWithChildren
   ApiV1MeRoute: typeof ApiV1MeRoute
   ApiV1PairRoute: typeof ApiV1PairRoute
+  ApiV1AuthAppleRoute: typeof ApiV1AuthAppleRoute
   ApiV1AuthSignOutRoute: typeof ApiV1AuthSignOutRoute
-  ApiV1AuthEmailStartRoute: typeof ApiV1AuthEmailStartRoute
-  ApiV1AuthEmailVerifyRoute: typeof ApiV1AuthEmailVerifyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -248,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1PairRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/v1/auth/apple': {
+      id: '/api/v1/auth/apple'
+      path: '/api/v1/auth/apple'
+      fullPath: '/api/v1/auth/apple'
+      preLoaderRoute: typeof ApiV1AuthAppleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/v1/auth/sign-out': {
       id: '/api/v1/auth/sign-out'
       path: '/api/v1/auth/sign-out'
@@ -268,20 +262,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/v1/devices/push-token'
       preLoaderRoute: typeof ApiV1DevicesPushTokenRouteImport
       parentRoute: typeof ApiV1DevicesRoute
-    }
-    '/api/v1/auth/email/start': {
-      id: '/api/v1/auth/email/start'
-      path: '/api/v1/auth/email/start'
-      fullPath: '/api/v1/auth/email/start'
-      preLoaderRoute: typeof ApiV1AuthEmailStartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/auth/email/verify': {
-      id: '/api/v1/auth/email/verify'
-      path: '/api/v1/auth/email/verify'
-      fullPath: '/api/v1/auth/email/verify'
-      preLoaderRoute: typeof ApiV1AuthEmailVerifyRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/v1/kids/$kidId/pairing-code': {
       id: '/api/v1/kids/$kidId/pairing-code'
@@ -327,9 +307,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiV1KidsRoute: ApiV1KidsRouteWithChildren,
   ApiV1MeRoute: ApiV1MeRoute,
   ApiV1PairRoute: ApiV1PairRoute,
+  ApiV1AuthAppleRoute: ApiV1AuthAppleRoute,
   ApiV1AuthSignOutRoute: ApiV1AuthSignOutRoute,
-  ApiV1AuthEmailStartRoute: ApiV1AuthEmailStartRoute,
-  ApiV1AuthEmailVerifyRoute: ApiV1AuthEmailVerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
