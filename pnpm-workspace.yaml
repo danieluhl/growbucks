@@ -17,3 +17,6 @@ minimumReleaseAgeExclude:
 
 # Expo supports pnpm's default isolated node_modules since SDK 54. If a React
 # Native library fails to resolve or build, switch to `nodeLinker: hoisted`.
+
+# Pin exact versions when adding dependencies (no ^ or ~ ranges).
+saveExact: true
